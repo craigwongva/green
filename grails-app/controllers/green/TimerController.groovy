@@ -5,8 +5,9 @@ import groovy.json.*
 
 class TimerController {
 
+    def NUM_COLORFUL_DISPLAY_DOTS = 64
 
-    def q = new TestVector[12]
+    def q = new TestVector[NUM_COLORFUL_DISPLAY_DOTS]
 
     def index() { }
 
@@ -21,8 +22,7 @@ class TimerController {
     }
 
     def work() {
-        def NUM_COLORFUL_DISPLAY_DOTS = 2
-        def NUM_ITERATIONS_TO_CALL_TEST_VECTOR = 10
+        def NUM_ITERATIONS_TO_CALL_TEST_VECTOR = 100
 
         //s/m: this can be made more groovy, right? spread operator?
         for (int i=0; i<NUM_COLORFUL_DISPLAY_DOTS; i++) {
@@ -30,23 +30,27 @@ class TimerController {
         }
 
         (1..NUM_ITERATIONS_TO_CALL_TEST_VECTOR).each {
-            println "work() big loop $it"
             for (int i=0; i<NUM_COLORFUL_DISPLAY_DOTS; i++) {
-                println "work() i is $i"
                 q[i].nextstep()
             }
-            sleep(1000)
         }
         render "C.work()999"
     }
 
     def url() { }
 
+    String xxx() {
+       String s = ''
+
+       for (int i=0; i<NUM_COLORFUL_DISPLAY_DOTS; i++) {
+            s += q[i]?.status()
+       }
+       s
+    }
+
     def status() {
         String s = '<br>' +
-            new Date().format("yyyyMMdd-HH:mm:ss.SSS", TimeZone.getTimeZone('UTC')) + '<br>' +
-            q[0]?.status() + '<br>' +
-            q[1]?.status() 
+            xxx() //+ ' ' + new Date().format("yyyyMMdd-HH:mm:ss.SSS", TimeZone.getTimeZone('UTC'))
         render s
     }
 
@@ -88,7 +92,7 @@ class TestVector {
         }
         if ((id2 == null) && id1) {
             println "TestVector.nextstep() will execute pz2, pz3, pz4()"
-            id2 = pz2()//; sleep(5000)
+            id2 = pz2()
             if (id2) id3 = pz3()
             if (id3) id4 = pz4()
             println "pz4() resulto is $id4"
@@ -96,9 +100,9 @@ class TestVector {
         if (id1 == null) {
             println "TestVector.nextstep() will execute pz1, pz2, pz3, pz4()"
             id1 = pz1()
-            if (id1) id2 = pz2()//;  sleep(5000)
+            if (id1) id2 = pz2()
             if (id2) id3 = pz3()
-            if (id3)  id4 = pz4()
+            if (id3) id4 = pz4()
             println "pz4() resultp is $id4"
         }
     }
@@ -141,10 +145,6 @@ class TestVector {
         def myprocess4 = [ 'bash', '-c', "curl -v -k -X GET -H \"Content-Type: application/json\" http://$PIAZZA_PRIME_BOX:8081/job/${id2.data.jobId}" ].execute()
         def myprocess4AsText = myprocess4.text
         def result4AsJson = new JsonSlurper().parseText(myprocess4AsText)
-        //println "pz3 result4AsJson.getClass() is ${result4AsJson.getClass()}"
-        //println "pz3 result4AsJson is $result4AsJson"
-        //println 'pz3l ' + result4AsJson.data
-        //println 'pz3m ' + result4AsJson.data.result
         try {
             result4AsJson.data.result.dataId
             returnval = result4AsJson
@@ -177,6 +177,6 @@ class TestVector {
     }
 
     String status() {
-     (id1? '1': '0') + (id2? '2': '0') + (id3? '3': '0') + (id4? '4': '0')
+     id4? 4 : (id3? 3 : (id2? 2 : (id1? 1 : 0)))
     }
 }

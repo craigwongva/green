@@ -19,7 +19,7 @@
  },'html'); 
 
  console.log('xxx');
- si1 = setInterval(getMessages1, 1000);
+ si1 = setInterval(getMessages1, 200);
 
   </script>
 This is body text in urlBar.gsp.

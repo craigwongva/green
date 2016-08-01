@@ -25,34 +25,44 @@
    var DARK_GREEN =      '#276033'  
    for (row = 0; row < ROWS_PER_SQUARE; row++) {
     for (col = 0; col < COLS_PER_SQUARE; col++) {
-       var fill
        var stroke
+       var fill
+       var filltext = ''
        var substring_start = THROWAWAY_BR_CHARS+row*ROWS_PER_SQUARE+col
-       if ((r.substring(substring_start, substring_start+1) == '0') ||
-           (r.substring(substring_start, substring_start+1) == '0')    ) {
+       var rchar = r.substring(substring_start, substring_start+1)
+       if (rchar == '0') {
            stroke = "white"
            fill = "white"
        }
-       if ((r.substring(substring_start, substring_start+1) == '1') ||
-           (r.substring(substring_start, substring_start+1) == '1')    ) {
+       if (rchar == '1') {
            stroke = STOPLIGHT_YELLOW
            fill = "white"
        }
-       if ((r.substring(substring_start, substring_start+1) == '2') ||
-           (r.substring(substring_start, substring_start+1) == '2')    ) {
+       if (rchar == '2') {
            stroke = STOPLIGHT_YELLOW
            fill = STOPLIGHT_YELLOW
        }
-       if ((r.substring(substring_start, substring_start+1) == '4') ||
-           (r.substring(substring_start, substring_start+1) == '4')    ) {
+       if (rchar == '4') {
            fill = 'pink'
-           if (t.substring(substring_start, substring_start+1) == '0') fill = DARK_GREEN
-           if (t.substring(substring_start, substring_start+1) == '1') fill = DARK_GREEN
-           if (t.substring(substring_start, substring_start+1) == '2') fill = MEDIUM_GREEN
-           if (t.substring(substring_start, substring_start+1) == '3') fill = STOPLIGHT_GREEN
+           filltext = 'error'
+           var tchar = t.substring(substring_start, substring_start+1)
+           if ((tchar == '0') ||
+               (tchar == '1')) {
+               fill = DARK_GREEN
+               filltext = 'S'
+           }
+           if (tchar == '2') {
+               fill = MEDIUM_GREEN
+               filltext = 'M'
+           }
+           if (tchar == '3') {
+               fill = STOPLIGHT_GREEN
+               filltext = 'L'
+           }
            stroke = fill
        }
-       var dot00 = paper.circle(ORIGINX+46*col, ORIGINY+46*row, 20).attr({ "stroke": stroke, "fill": fill });
+       paper.circle(ORIGINX+46*col, ORIGINY+46*row, 20).attr({ "stroke": stroke, "fill": fill });
+       paper.text(ORIGINX+46*col, ORIGINY+46*row, filltext)
     }
    }
   },'html'); 

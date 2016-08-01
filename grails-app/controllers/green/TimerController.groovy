@@ -40,7 +40,7 @@ class TimerController {
 
     def url() { }
 
-    String xxx() {
+    String stringOfDotStatusEachRepresentsAPiazzaJob() {
        String s = ''
 
        for (int i=0; i<NUM_COLORFUL_DISPLAY_DOTS; i++) {
@@ -49,17 +49,32 @@ class TimerController {
        s
     }
 
+    String stringOfDotDurationEachRepresentsAPiazzaJob() {
+       String s = ''
+       for (int i=0; i<NUM_COLORFUL_DISPLAY_DOTS; i++) {
+
+            if (q[i]?.id5) {
+                s += 'Y'
+            }
+            else {
+                s += 'N'
+            }
+       }
+       s
+    }
+
     def status() {
-        String s = '<br>' +
-            xxx() //+ ' ' + new Date().format("yyyyMMdd-HH:mm:ss.SSS", TimeZone.getTimeZone('UTC'))
-        render s
+        render(contentType: 'text/json') {[
+            'dotStatus': stringOfDotStatusEachRepresentsAPiazzaJob(),
+            'dotDuration': stringOfDotDurationEachRepresentsAPiazzaJob(),
+        ]}
     }
 
     def external() {
         def randoms = randomNumbers()
         sleep(randoms[0]*1000)
-        render(contentType: 'text/json') {[
-            'results': results,
+        render(contentType: 'application/json') {[
+            'results': randoms[0],
             'status': results ? "OK" : "Nothing present"
         ]}
     }

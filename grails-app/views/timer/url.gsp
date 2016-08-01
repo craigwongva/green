@@ -9,12 +9,17 @@
  function getMessages1() {
 
   $.post('/green/timer/status', {}, function(r) {
-   $('#controllerresults').html('This is urlBar.gsps #controllerresults plus status result: ' + r );
-   var THROWAWAY_BR_CHARS = 4
+   $('#controllerresults').html('This is urlBar.gsps #controllerresults plus status result:<br> ' + r );
+   var foox = JSON.parse(r)
+   console.log(foox);
+   r = foox.dotStatus
+   var THROWAWAY_BR_CHARS = 0
    var ROWS_PER_SQUARE = 10
    var COLS_PER_SQUARE = ROWS_PER_SQUARE
    var ORIGINX = 40
    var ORIGINY = 100
+   var STOP_LIGHT_YELLOW = '#FAD201'
+   var STOP_LIGHT_GREEN = '#27E833'
    for (row = 0; row < ROWS_PER_SQUARE; row++) {
     for (col = 0; col < COLS_PER_SQUARE; col++) {
        var fill
@@ -27,13 +32,13 @@
        }
        if ((r.substring(substring_start, substring_start+1) == '1') ||
            (r.substring(substring_start, substring_start+1) == '1')    ) {
-           stroke = "#fad201"
+           stroke = STOP_LIGHT_YELLOW
            fill = "white"
        }
        if ((r.substring(substring_start, substring_start+1) == '2') ||
            (r.substring(substring_start, substring_start+1) == '2')    ) {
-           stroke = "#fad201"
-           fill = "#fad201"
+           stroke = STOP_LIGHT_YELLOW
+           fill = STOP_LIGHT_YELLOW
        }
        if ((r.substring(substring_start, substring_start+1) == '4') ||
            (r.substring(substring_start, substring_start+1) == '4')    ) {

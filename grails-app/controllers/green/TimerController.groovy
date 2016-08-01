@@ -30,7 +30,6 @@ class TimerController {
         }
 
         (1..NUM_ITERATIONS_TO_CALL_TEST_VECTOR).each {
-            if (it % 200 == 0) println "big loop $it"
             for (int i=0; i<NUM_COLORFUL_DISPLAY_DOTS; i++) {
                 q[i].nextstep()
             }
@@ -170,7 +169,7 @@ class TestVector {
             def myprocess5 = [ 'bash', '-c', "curl -v -k -X GET -H \"Content-Type: application/json\" http://$PIAZZA_PRIME_BOX:8081/data/${id3.data.result.dataId}" ].execute()
             String myprocess5AsText = myprocess5.text
             def result5AsJson = new JsonSlurper().parseText(myprocess5AsText)
-
+            id5 = result5AsJson?.data?.dataType?.content //this eliminates the need for an extra iteration to populate id5
             result5AsJson
         }
     }

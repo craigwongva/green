@@ -60,7 +60,7 @@
  }
 
  $.post('/green/timer/work', {}, function(r) {
-  $('#workresults').html('This is urlBar.gsps work plus work result: ' + r);
+  //$('#workresults').html('This is urlBar.gsps work plus work result: ' + r);
  },'html'); 
 
  var paper = Raphael(0, 0, 1200, 1200);
@@ -68,7 +68,9 @@
  si1 = setInterval(getMessages1, 200);
 
   </script>
+  <!--
   <div id="workresults" >This is #workresults in urlBar.gsp...</div>	
   <div id="controllerresults" >This is #controllerresults in urlBar.gsp...</div>	
+  -->
  </body>
 </html>

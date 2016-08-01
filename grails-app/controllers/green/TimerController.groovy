@@ -5,7 +5,7 @@ import groovy.json.*
 
 class TimerController {
 
-    def NUM_COLORFUL_DISPLAY_DOTS = 16
+    def NUM_COLORFUL_DISPLAY_DOTS = 100
 
     def q = new TestVector[NUM_COLORFUL_DISPLAY_DOTS]
 
@@ -13,7 +13,7 @@ class TimerController {
 
     def randomNumbers() {
         Random rand = new Random()  
-        int max = 8
+        int max = 16
         def randomIntegerList = []  
         (1..12).each {  
             randomIntegerList << rand.nextInt(max+1)  
@@ -22,7 +22,7 @@ class TimerController {
     }
 
     def work() {
-        def NUM_ITERATIONS_TO_CALL_TEST_VECTOR = 200
+        def NUM_ITERATIONS_TO_CALL_TEST_VECTOR = 3200
 
         //s/m: this can be made more groovy, right? spread operator?
         for (int i=0; i<NUM_COLORFUL_DISPLAY_DOTS; i++) {
@@ -30,7 +30,7 @@ class TimerController {
         }
 
         (1..NUM_ITERATIONS_TO_CALL_TEST_VECTOR).each {
-            if (it % 20 == 0) println "big loop $it"
+            if (it % 200 == 0) println "big loop $it"
             for (int i=0; i<NUM_COLORFUL_DISPLAY_DOTS; i++) {
                 q[i].nextstep()
             }

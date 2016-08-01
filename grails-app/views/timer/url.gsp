@@ -10,22 +10,37 @@
 
   $.post('/green/timer/status', {}, function(r) {
    $('#controllerresults').html('This is urlBar.gsps #controllerresults plus status result: ' + r );
-   var ROWS_PER_SQUARE = 4
+   var THROWAWAY_BR_CHARS = 4
+   var ROWS_PER_SQUARE = 10
    var COLS_PER_SQUARE = ROWS_PER_SQUARE
    var ORIGINX = 40
    var ORIGINY = 100
    for (row = 0; row < ROWS_PER_SQUARE; row++) {
     for (col = 0; col < COLS_PER_SQUARE; col++) {
-       var color
-       var THROWAWAY_BR_CHARS = 4
+       var fill
+       var stroke
        var substring_start = THROWAWAY_BR_CHARS+row*ROWS_PER_SQUARE+col
-       if (r.substring(substring_start, substring_start+1) == '4') {
-           color = "green"
+       if ((r.substring(substring_start, substring_start+1) == '0') ||
+           (r.substring(substring_start, substring_start+1) == '0')    ) {
+           stroke = "white"
+           fill = "white"
        }
-       else {
-           color = "blue"
+       if ((r.substring(substring_start, substring_start+1) == '1') ||
+           (r.substring(substring_start, substring_start+1) == '1')    ) {
+           stroke = "#fad201"
+           fill = "white"
        }
-       var dot00 = paper.circle(ORIGINX+46*col, ORIGINY+46*row, 20).attr({ "stroke": "orange" }); //.attr({ "fill": color });
+       if ((r.substring(substring_start, substring_start+1) == '2') ||
+           (r.substring(substring_start, substring_start+1) == '2')    ) {
+           stroke = "#fad201"
+           fill = "#fad201"
+       }
+       if ((r.substring(substring_start, substring_start+1) == '4') ||
+           (r.substring(substring_start, substring_start+1) == '4')    ) {
+           stroke = "#27e833"
+           fill = "#27e833"
+       }
+       var dot00 = paper.circle(ORIGINX+46*col, ORIGINY+46*row, 20).attr({ "stroke": stroke, "fill": fill });
     }
    }
   },'html'); 

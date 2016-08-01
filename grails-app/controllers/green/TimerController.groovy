@@ -54,10 +54,17 @@ class TimerController {
        for (int i=0; i<NUM_COLORFUL_DISPLAY_DOTS; i++) {
 
             if (q[i]?.id5) {
-                s += 'Y'
+                def cat = new JsonSlurper().parseText(q[i].id5)
+                int durationAsInteger = cat.results
+                def temp
+                if (durationAsInteger <= 16) temp = '3'
+                if (durationAsInteger <= 12) temp = '2'
+                if (durationAsInteger <= 8) temp = '1'
+                if (durationAsInteger <= 4) temp = '0'
+                s += temp
             }
             else {
-                s += 'N'
+                s += '5'
             }
        }
        s

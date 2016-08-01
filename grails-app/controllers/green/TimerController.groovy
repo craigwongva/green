@@ -5,7 +5,7 @@ import groovy.json.*
 
 class TimerController {
 
-    def NUM_COLORFUL_DISPLAY_DOTS = 64
+    def NUM_COLORFUL_DISPLAY_DOTS = 16
 
     def q = new TestVector[NUM_COLORFUL_DISPLAY_DOTS]
 
@@ -30,6 +30,7 @@ class TimerController {
         }
 
         (1..NUM_ITERATIONS_TO_CALL_TEST_VECTOR).each {
+            println "big loop $it"
             for (int i=0; i<NUM_COLORFUL_DISPLAY_DOTS; i++) {
                 q[i].nextstep()
             }
@@ -77,33 +78,24 @@ class TestVector {
     void nextstep() {
         if ((id5 == null) && id4) {
             id5 = pz5()
-            println "pz5() resultm is $id5"
         }
         if ((id4 == null) && id3) {
-            println "TestVector.nextstep() will execute pz4()"
             id4 = pz4()
-            println "pz4() resultm is $id4"
         }
         if ((id3 == null) && id2) {
-            println "TestVector.nextstep() will execute pz3, pz4()"
             id3 = pz3()
             if (id3) id4 = pz4()
-            println "pz4() resultn is $id4"
         }
         if ((id2 == null) && id1) {
-            println "TestVector.nextstep() will execute pz2, pz3, pz4()"
             id2 = pz2()
             if (id2) id3 = pz3()
             if (id3) id4 = pz4()
-            println "pz4() resulto is $id4"
         }
         if (id1 == null) {
-            println "TestVector.nextstep() will execute pz1, pz2, pz3, pz4()"
             id1 = pz1()
             if (id1) id2 = pz2()
             if (id2) id3 = pz3()
             if (id3) id4 = pz4()
-            println "pz4() resultp is $id4"
         }
     }
 
@@ -122,9 +114,7 @@ class TestVector {
     }
 
     def pz2() {
-        println "pz2() is starting"
 	assert id1
-        println "id1 is $id1"
         def body3 = '{"type":"execute-service","data":{"serviceId":"REPLACEME","dataInputs":{},"dataOutput":[{"mimeType":"application/json","type":"text"}]}}'
         body3 = body3.replaceAll('REPLACEME', id1.data.serviceId)
 
@@ -139,9 +129,7 @@ class TestVector {
     def pz3() {
         def returnval
 
-        println "pz3() is starting"
 	assert id2
-        println "id2 is $id2"
         def myprocess4 = [ 'bash', '-c', "curl -v -k -X GET -H \"Content-Type: application/json\" http://$PIAZZA_PRIME_BOX:8081/job/${id2.data.jobId}" ].execute()
         def myprocess4AsText = myprocess4.text
         def result4AsJson = new JsonSlurper().parseText(myprocess4AsText)
@@ -152,14 +140,11 @@ class TestVector {
         catch(e) {
             returnval = null
         }
-        println "pz3 returnval is $returnval"
         returnval
     }
 
     def pz4() {
-        println "pz4() is starting"
 	assert id3
-        println "id3 is $id3"
         if (id3?.data) {
             def myprocess5 = [ 'bash', '-c', "curl -v -k -X GET -H \"Content-Type: application/json\" http://$PIAZZA_PRIME_BOX:8081/data/${id3.data.result.dataId}" ].execute()
             String myprocess5AsText = myprocess5.text
@@ -171,8 +156,6 @@ class TestVector {
 
     def pz5() {
         assert id4
-        println "pz5: id4.getClass() is " + id4.getClass()
-        println "pz5: id4 is $id4"
         id4?.data?.dataType?.content
     }
 

@@ -22,7 +22,7 @@ class TimerController {
     }
 
     def work() {
-        def NUM_ITERATIONS_TO_CALL_TEST_VECTOR = 100
+        def NUM_ITERATIONS_TO_CALL_TEST_VECTOR = 200
 
         //s/m: this can be made more groovy, right? spread operator?
         for (int i=0; i<NUM_COLORFUL_DISPLAY_DOTS; i++) {
@@ -30,7 +30,7 @@ class TimerController {
         }
 
         (1..NUM_ITERATIONS_TO_CALL_TEST_VECTOR).each {
-            println "big loop $it"
+            if (it % 20 == 0) println "big loop $it"
             for (int i=0; i<NUM_COLORFUL_DISPLAY_DOTS; i++) {
                 q[i].nextstep()
             }
@@ -100,7 +100,6 @@ class TestVector {
     }
 
     def pz1() {
-        println "pz1() is starting"
         def body2 = '{"url":"REPLACEME","method":"GET","contractUrl":"REPLACEME/","resourceMetadata":{"name":"Hello World Test","description":"Hello world test","classType":{"classification":"UNCLASSIFIED"}}}'
         body2 = body2.replaceAll('REPLACEME', EXTERNAL_USER_SERVICE)
 

@@ -41,8 +41,8 @@ class TimerController {
         render "C.work()999"
     }
 
-    def url() { 
-        piazzaBox = params.piazza
+    def dots() { 
+        piazzaBox = params.containers
     }
 
     String stringOfDotStatusEachRepresentsAPiazzaJob() {

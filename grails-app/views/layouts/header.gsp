@@ -2,7 +2,7 @@
 <html>
 
 	<head>
-		<title>My Title</title>	
+		<title>Piazza'</title>	
 
 		<g:javascript library='jquery' />
 

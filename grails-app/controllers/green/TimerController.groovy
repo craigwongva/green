@@ -4,6 +4,8 @@ import java.util.Random
 import groovy.json.*
 
 class TimerController {
+    def piazzaBox
+    def externalUserService
 
     def NUM_COLORFUL_DISPLAY_DOTS = 100
 
@@ -26,10 +28,12 @@ class TimerController {
 
         //s/m: this can be made more groovy, right? spread operator?
         for (int i=0; i<NUM_COLORFUL_DISPLAY_DOTS; i++) {
-            q[i] = new TestVector()
+            q[i] = new TestVector(piazzaBox)
         }
 
         (1..NUM_ITERATIONS_TO_CALL_TEST_VECTOR).each {
+            if (it % 400 == 0) {
+            }
             for (int i=0; i<NUM_COLORFUL_DISPLAY_DOTS; i++) {
                 q[i].nextstep()
             }
@@ -37,7 +41,9 @@ class TimerController {
         render "C.work()999"
     }
 
-    def url() { }
+    def url() { 
+        piazzaBox = params.piazza
+    }
 
     String stringOfDotStatusEachRepresentsAPiazzaJob() {
        String s = ''
@@ -87,14 +93,19 @@ class TimerController {
 }
 
 class TestVector {
-    static def PIAZZA_PRIME_BOX = '52.42.114.223'
-    static def EXTERNAL_USER_SERVICE = 'http://52.42.147.229:8080/green/timer/external'
+    //static def PIAZZA_PRIME_BOX = 'prime.piazzageo.io' 
+    def PIAZZA_PRIME_BOX 
+    def EXTERNAL_USER_SERVICE = 'http://monitor-prime.piazzageo.io:8080/green/timer/external'
 
     def id1
     def id2
     def id3
     def id4
     def id5
+
+    TestVector(dummy1) {
+        PIAZZA_PRIME_BOX = (dummy1) ?: 'prime.piazzageo.io' //'52.42.114.223'
+    }
 
     void nextstep() {
         if ((id5 == null) && id4) {

@@ -15,14 +15,14 @@
    t = foox.dotDuration
    $('#controllerresults').html('This is urlBar.gsps #controllerresults plus status result:<br> ' + r + '<br>' + t );
    var THROWAWAY_BR_CHARS = 0
-   var ROWS_PER_SQUARE = 10
+   var ROWS_PER_SQUARE = Math.sqrt(r.length) //10
    var COLS_PER_SQUARE = ROWS_PER_SQUARE
    var ORIGINX = 40
    var ORIGINY = 100
    var STOPLIGHT_YELLOW = '#FAD201'
    var STOPLIGHT_GREEN = '#27E833'
-   var MEDIUM_GREEN =    '#27A033'
-   var DARK_GREEN =      '#276033'  
+   var MEDIUM_GREEN =    '#27C833'
+   var DARK_GREEN =      '#27A833'  
    for (row = 0; row < ROWS_PER_SQUARE; row++) {
     for (col = 0; col < COLS_PER_SQUARE; col++) {
        var stroke

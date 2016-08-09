@@ -95,7 +95,8 @@ class TimerController {
 class TestVector {
     //static def PIAZZA_PRIME_BOX = 'prime.piazzageo.io' 
     def PIAZZA_PRIME_BOX 
-    def EXTERNAL_USER_SERVICE = 'http://monitor-prime.piazzageo.io:8080/green/timer/external'
+    //def EXTERNAL_USER_SERVICE = 'http://52.42.114.37:8078/green/timer/external' //'http://prime.piazzageo.io:8078/green/timer/external'
+    def EXTERNAL_USER_SERVICE = 'http://prime.piazzageo.io:8078/green/timer/external'
 
     def id1
     def id2
@@ -104,7 +105,7 @@ class TestVector {
     def id5
 
     TestVector(dummy1) {
-        PIAZZA_PRIME_BOX = (dummy1) ?: 'prime.piazzageo.io' //'52.42.114.223'
+        PIAZZA_PRIME_BOX = (dummy1) ?: 'prime.piazzageo.io' 
     }
 
     void nextstep() {

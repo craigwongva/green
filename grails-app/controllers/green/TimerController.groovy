@@ -23,12 +23,21 @@ class TimerController {
         randomIntegerList
     }
 
+    def myIP() {
+
+        def myprocess2 = [ 'bash', '-c', "curl http://169.254.169.254/latest/meta-data/public-ipv4" ].execute()
+        myprocess2.waitFor()
+        String myprocess2AsText = myprocess2.text
+
+        myprocess2AsText
+    }
+
     def work() {
         def NUM_ITERATIONS_TO_CALL_TEST_VECTOR = 3200
 
         //s/m: this can be made more groovy, right? spread operator?
         for (int i=0; i<NUM_COLORFUL_DISPLAY_DOTS; i++) {
-            q[i] = new TestVector(piazzaBox)
+            q[i] = new TestVector(piazzaBox, externalUserService)
         }
 
         (1..NUM_ITERATIONS_TO_CALL_TEST_VECTOR).each {
@@ -42,7 +51,8 @@ class TimerController {
     }
 
     def dots() { 
-        piazzaBox = params.containers
+        piazzaBox = (params.containers) ?: myIP()
+        externalUserService = myIP()
     }
 
     String stringOfDotStatusEachRepresentsAPiazzaJob() {
@@ -93,10 +103,8 @@ class TimerController {
 }
 
 class TestVector {
-    //static def PIAZZA_PRIME_BOX = 'prime.piazzageo.io' 
     def PIAZZA_PRIME_BOX 
-    //def EXTERNAL_USER_SERVICE = 'http://52.42.114.37:8078/green/timer/external' //'http://prime.piazzageo.io:8078/green/timer/external'
-    def EXTERNAL_USER_SERVICE = 'http://prime.piazzageo.io:8078/green/timer/external'
+    def EXTERNAL_USER_SERVICE //= 'http://prime.piazzageo.io:8078/green/timer/external'
 
     def id1
     def id2
@@ -104,8 +112,9 @@ class TestVector {
     def id4
     def id5
 
-    TestVector(dummy1) {
-        PIAZZA_PRIME_BOX = (dummy1) ?: 'prime.piazzageo.io' 
+    TestVector(dummy1, dummy2) {
+        EXTERNAL_USER_SERVICE = "http://$dummy2:8078/green/timer/external"
+        PIAZZA_PRIME_BOX = dummy1
     }
 
     void nextstep() {

@@ -10,6 +10,7 @@ class TimerController {
     def NUM_COLORFUL_DISPLAY_DOTS = 100
 
     def q = new TestVector[NUM_COLORFUL_DISPLAY_DOTS]
+    def qhealth = new HealthArray[1]
 
     def index() { }
 
@@ -33,6 +34,8 @@ class TimerController {
     }
 
     def work() {
+        qhealth[0] = new HealthArray()
+
         def NUM_ITERATIONS_TO_CALL_TEST_VECTOR = 3200
 
         //s/m: this can be made more groovy, right? spread operator?
@@ -85,10 +88,22 @@ class TimerController {
        s
     }
 
+    String stringOfSquareHealthEachRepresentsAContainerOrProcess() {
+        Random rand = new Random()  
+       String s = ''
+       s += (qhealth[0].port8079)? rand.nextInt(1111)  : 'A'
+       s += (qhealth[0].port8081)? '1' : 'B'
+       s += (qhealth[0].port8083)? '3' : 'C'
+       s += (qhealth[0].port8084)? '4' : 'D'
+       s += (qhealth[0].port8085)? '5' : 'E'
+       s += (qhealth[0].port8088)? '8' : 'F'
+    }
+
     def status() {
         render(contentType: 'text/json') {[
             'dotStatus': stringOfDotStatusEachRepresentsAPiazzaJob(),
             'dotDuration': stringOfDotDurationEachRepresentsAPiazzaJob(),
+            'squareHealth': stringOfSquareHealthEachRepresentsAContainerOrProcess()
         ]}
     }
 
@@ -100,6 +115,25 @@ class TimerController {
             'status': results ? "OK" : "Nothing present"
         ]}
     }
+}
+
+class HealthArray {
+    def port8079
+    def port8081
+    def port8083
+    def port8084
+    def port8085
+    def port8088
+
+    HealthArray() {
+    port8079 = true
+    port8081 = false
+    port8083 = true
+    port8084 = false
+    port8085 = true
+    port8088 = false
+    }
+    
 }
 
 class TestVector {

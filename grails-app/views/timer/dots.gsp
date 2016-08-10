@@ -13,7 +13,8 @@
    console.log(foox);
    r = foox.dotStatus
    t = foox.dotDuration
-   $('#controllerresults').html('This is urlBar.gsps #controllerresults plus status result:<br> ' + r + '<br>' + t );
+   v = foox.squareHealth
+   $('#controllerresults').html('This is urlBar.gsps #controllerresults plus status result:<br> ' + r + '<br>' + t + '<br>' + v);
    var THROWAWAY_BR_CHARS = 0
    var ROWS_PER_SQUARE = Math.sqrt(r.length) //10
    var COLS_PER_SQUARE = ROWS_PER_SQUARE
@@ -80,7 +81,7 @@
   </script>
   <!--
   <div id="workresults" >This is #workresults in urlBar.gsp...</div>	
-  <div id="controllerresults" >This is #controllerresults in urlBar.gsp...</div>	
   -->
+  <div id="controllerresults" >This is #controllerresults in urlBar.gsp...</div>	
  </body>
 </html>

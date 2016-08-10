@@ -25,12 +25,11 @@ class TimerController {
     }
 
     def myIP() {
+        def myprocess = [ 'bash', '-c', "curl http://169.254.169.254/latest/meta-data/public-ipv4" ].execute()
+        myprocess.waitFor()
+        String myprocessAsText = myprocess.text
 
-        def myprocess2 = [ 'bash', '-c', "curl http://169.254.169.254/latest/meta-data/public-ipv4" ].execute()
-        myprocess2.waitFor()
-        String myprocess2AsText = myprocess2.text
-
-        myprocess2AsText
+        myprocessAsText
     }
 
     def work() {
@@ -90,13 +89,23 @@ class TimerController {
 
     String stringOfSquareHealthEachRepresentsAContainerOrProcess() {
         Random rand = new Random()  
+       
        String s = ''
-       s += (qhealth[0].port8079)? rand.nextInt(1111)  : 'A'
-       s += (qhealth[0].port8081)? '1' : 'B'
-       s += (qhealth[0].port8083)? '3' : 'C'
-       s += (qhealth[0].port8084)? '4' : 'D'
-       s += (qhealth[0].port8085)? '5' : 'E'
-       s += (qhealth[0].port8088)? '8' : 'F'
+
+       if (qhealth[0]) {
+          s += (qhealth[0].port8079)? rand.nextInt(1111) : 'A'
+          s += ','
+          s += (qhealth[0].port8081)? rand.nextInt(1111) : 'B'
+          s += ','
+          s += (qhealth[0].port8083)? rand.nextInt(1111) : 'C'
+          s += ','
+          s += (qhealth[0].port8084)? rand.nextInt(1111) : 'D'
+          s += ','
+          s += (qhealth[0].port8085)? rand.nextInt(1111) : 'E'
+          s += ','
+          s += (qhealth[0].port8088)? rand.nextInt(1111) : 'F'
+       }
+       s
     }
 
     def status() {
@@ -118,6 +127,7 @@ class TimerController {
 }
 
 class HealthArray {
+    def myip
     def port8079
     def port8081
     def port8083
@@ -126,14 +136,60 @@ class HealthArray {
     def port8088
 
     HealthArray() {
-    port8079 = true
-    port8081 = false
-    port8083 = true
-    port8084 = false
-    port8085 = true
-    port8088 = false
+       myip = myIP()
+       port8079 = test8079()
+       port8081 = test8081()
+       port8083 = test8083()
+       port8084 = test8084()
+       port8085 = test8085()
+       port8088 = test8088()
     }
     
+    def myIP() {
+        def myprocess = [ 'bash', '-c', "curl http://169.254.169.254/latest/meta-data/public-ipv4" ].execute()
+        myprocess.waitFor()
+        String myprocessAsText = myprocess.text
+
+        myprocessAsText
+    }
+
+    boolean test8079() {
+        def myprocess = [ 'bash', '-c', "curl --max-time 3 http://$myip:8079" ].execute()
+        myprocess.waitFor()
+        String myprocessAsText = myprocess.text
+        myprocessAsText.indexOf('Nexus')
+    }
+
+    boolean test8081() {
+        def myprocess = [ 'bash', '-c', "curl --max-time 3 http://$myip:8081" ].execute()
+        myprocess.waitFor()
+        String myprocessAsText = myprocess.text
+        myprocessAsText.indexOf('pz-gateway')
+    }
+    boolean test8083() {
+        def myprocess = [ 'bash', '-c', "curl --max-time 3 http://$myip:8083" ].execute()
+        myprocess.waitFor()
+        String myprocessAsText = myprocess.text
+        myprocessAsText.indexOf('pz-jobmanager')
+    }
+    boolean test8084() {
+        def myprocess = [ 'bash', '-c', "curl --max-time 3 http://$myip:8084" ].execute()
+        myprocess.waitFor()
+        String myprocessAsText = myprocess.text
+        myprocessAsText.indexOf('Loader')
+    }
+    boolean test8085() {
+        def myprocess = [ 'bash', '-c', "curl --max-time 3 http://$myip:8085" ].execute()
+        myprocess.waitFor()
+        String myprocessAsText = myprocess.text
+        myprocessAsText.indexOf('pz-access')
+    }
+    boolean test8088() {
+        def myprocess = [ 'bash', '-c', "curl --max-time 3 http://$myip:8088" ].execute()
+        myprocess.waitFor()
+        String myprocessAsText = myprocess.text
+        myprocessAsText.indexOf('Piazza Service Controller')
+    }
 }
 
 class TestVector {

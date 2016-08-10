@@ -6,6 +6,7 @@ import groovy.json.*
 class TimerController {
     def piazzaBox
     def externalUserService
+    def workers
 
     def NUM_COLORFUL_DISPLAY_DOTS = 100
 
@@ -33,17 +34,18 @@ class TimerController {
     }
 
     def work() {
-        qhealth[0] = new HealthArray()
 
-        def NUM_ITERATIONS_TO_CALL_TEST_VECTOR = 3200
+        def MAX_ITERATION_TO_CALL_TEST_VECTOR = 32000
 
         //s/m: this can be made more groovy, right? spread operator?
         for (int i=0; i<NUM_COLORFUL_DISPLAY_DOTS; i++) {
             q[i] = new TestVector(piazzaBox, externalUserService)
         }
 
-        (1..NUM_ITERATIONS_TO_CALL_TEST_VECTOR).each {
-            if (it % 400 == 0) {
+        (0..MAX_ITERATION_TO_CALL_TEST_VECTOR).each {
+            if (it % 4 == 0) {
+                println "iteration $it"
+                qhealth[0] = new HealthArray()
             }
             for (int i=0; i<NUM_COLORFUL_DISPLAY_DOTS; i++) {
                 q[i].nextstep()
@@ -157,38 +159,38 @@ class HealthArray {
         def myprocess = [ 'bash', '-c', "curl --max-time 3 http://$myip:8079" ].execute()
         myprocess.waitFor()
         String myprocessAsText = myprocess.text
-        myprocessAsText.indexOf('Nexus')
+        myprocessAsText.indexOf('Nexus') > 0
     }
 
     boolean test8081() {
         def myprocess = [ 'bash', '-c', "curl --max-time 3 http://$myip:8081" ].execute()
         myprocess.waitFor()
         String myprocessAsText = myprocess.text
-        myprocessAsText.indexOf('pz-gateway')
+        myprocessAsText.indexOf('pz-gateway') > 0
     }
     boolean test8083() {
         def myprocess = [ 'bash', '-c', "curl --max-time 3 http://$myip:8083" ].execute()
         myprocess.waitFor()
         String myprocessAsText = myprocess.text
-        myprocessAsText.indexOf('pz-jobmanager')
+        myprocessAsText.indexOf('pz-jobmanager') > 0
     }
     boolean test8084() {
         def myprocess = [ 'bash', '-c', "curl --max-time 3 http://$myip:8084" ].execute()
         myprocess.waitFor()
         String myprocessAsText = myprocess.text
-        myprocessAsText.indexOf('Loader')
+        myprocessAsText.indexOf('Loader') > 0
     }
     boolean test8085() {
         def myprocess = [ 'bash', '-c', "curl --max-time 3 http://$myip:8085" ].execute()
         myprocess.waitFor()
         String myprocessAsText = myprocess.text
-        myprocessAsText.indexOf('pz-access')
+        myprocessAsText.indexOf('pz-access') > 0
     }
     boolean test8088() {
         def myprocess = [ 'bash', '-c', "curl --max-time 3 http://$myip:8088" ].execute()
         myprocess.waitFor()
         String myprocessAsText = myprocess.text
-        myprocessAsText.indexOf('Piazza Service Controller')
+        myprocessAsText.indexOf('Piazza Service Controller') > 0
     }
 }
 
@@ -239,7 +241,9 @@ class TestVector {
         myprocess2.waitFor()
         String myprocess2AsText =  myprocess2.text
 
-        def result2AsJson = new JsonSlurper().parseText(myprocess2AsText)
+        def result2AsJson = null
+
+        try { result2AsJson = new JsonSlurper().parseText(myprocess2AsText) } catch(e) {}
 
         result2AsJson
     }

@@ -51,7 +51,7 @@ class TimerController {
 
         (0..MAX_ITERATION_TO_CALL_TEST_VECTOR).each {
             if (iamworker == workers) {
-                def HEALTH_CHECK_SERVICES_EVERY_SO_OFTEN = 20
+                def HEALTH_CHECK_SERVICES_EVERY_SO_OFTEN = 10
                 if (it % HEALTH_CHECK_SERVICES_EVERY_SO_OFTEN == 0) {
                     qhealth[0] = new HealthArray()
                 }
@@ -181,24 +181,28 @@ class HealthArray {
         String myprocessAsText = myprocess.text
         myprocessAsText.indexOf('pz-gateway') > 0
     }
+
     boolean test8083() {
         def myprocess = [ 'bash', '-c', "curl --max-time 3 http://$myip:8083" ].execute()
         myprocess.waitFor()
         String myprocessAsText = myprocess.text
         myprocessAsText.indexOf('pz-jobmanager') > 0
     }
+
     boolean test8084() {
         def myprocess = [ 'bash', '-c', "curl --max-time 3 http://$myip:8084" ].execute()
         myprocess.waitFor()
         String myprocessAsText = myprocess.text
         myprocessAsText.indexOf('Loader') > 0
     }
+
     boolean test8085() {
         def myprocess = [ 'bash', '-c', "curl --max-time 3 http://$myip:8085" ].execute()
         myprocess.waitFor()
         String myprocessAsText = myprocess.text
         myprocessAsText.indexOf('pz-access') > 0
     }
+
     boolean test8088() {
         def myprocess = [ 'bash', '-c', "curl --max-time 3 http://$myip:8088" ].execute()
         myprocess.waitFor()
@@ -209,7 +213,7 @@ class HealthArray {
 
 class TestVector {
     def PIAZZA_PRIME_BOX 
-    def EXTERNAL_USER_SERVICE //= 'http://prime.piazzageo.io:8078/green/timer/external'
+    def EXTERNAL_USER_SERVICE
 
     def id1
     def id2
@@ -255,7 +259,6 @@ class TestVector {
         String myprocess2AsText =  myprocess2.text
 
         def result2AsJson = null
-
         try { result2AsJson = new JsonSlurper().parseText(myprocess2AsText) } catch(e) {}
 
         result2AsJson
@@ -263,31 +266,34 @@ class TestVector {
 
     def pz2() {
 	assert id1
+
+        def result3AsJson = null
         def body3 = '{"type":"execute-service","data":{"serviceId":"REPLACEME","dataInputs":{},"dataOutput":[{"mimeType":"application/json","type":"text"}]}}'
         body3 = body3.replaceAll('REPLACEME', id1.data.serviceId)
 
         def myprocess3 = [ 'bash', '-c', "curl -v -k -X POST -H \"Content-Type: application/json\" -d '${body3}' http://$PIAZZA_PRIME_BOX:8081/job" ].execute()
-        String myprocess3AsText =  myprocess3.text
 
-        def result3AsJson = new JsonSlurper().parseText(myprocess3AsText)
+        try {
+           String myprocess3AsText =  myprocess3.text
+
+           result3AsJson = new JsonSlurper().parseText(myprocess3AsText) 
+        } catch(e) {}
 
         result3AsJson
     }
 
     def pz3() {
-        def returnval
-
 	assert id2
-        def myprocess4 = [ 'bash', '-c', "curl -v -k -X GET -H \"Content-Type: application/json\" http://$PIAZZA_PRIME_BOX:8081/job/${id2.data.jobId}" ].execute()
-        def myprocess4AsText = myprocess4.text
-        def result4AsJson = new JsonSlurper().parseText(myprocess4AsText)
+
+        def returnval = null
+        def myprocess4 = [ 'bash', '-c', "curl -v -k -X GET -H \"Content-Type: application/json\" http://$PIAZZA_PRIME_BOX:8081/job/${id2?.data?.jobId}" ].execute()
+        def myprocess4AsText
         try {
+            myprocess4AsText = myprocess4.text
+            def result4AsJson = new JsonSlurper().parseText(myprocess4AsText)
             result4AsJson.data.result.dataId
             returnval = result4AsJson
-        }
-        catch(e) {
-            returnval = null
-        }
+        } catch(e) {}
         returnval
     }
 

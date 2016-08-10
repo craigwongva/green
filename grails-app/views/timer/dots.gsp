@@ -14,7 +14,7 @@
    r = foox.dotStatus
    t = foox.dotDuration
    v = foox.squareHealth
-   $('#controllerresults').html('This is urlBar.gsps #controllerresults plus status result:<br> ' + r + '<br>' + t + '<br>' + v);
+   $('#controllerresults').html(v);
    var THROWAWAY_BR_CHARS = 0
    var ROWS_PER_SQUARE = Math.sqrt(r.length) //10
    var COLS_PER_SQUARE = ROWS_PER_SQUARE

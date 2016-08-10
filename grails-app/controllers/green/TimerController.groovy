@@ -6,7 +6,7 @@ import groovy.json.*
 class TimerController {
     def piazzaBox
     def externalUserService
-    def workers
+    def workers = 0
 
     def NUM_COLORFUL_DISPLAY_DOTS = 100
 
@@ -35,23 +35,32 @@ class TimerController {
 
     def work() {
 
-        def MAX_ITERATION_TO_CALL_TEST_VECTOR = 32000
+        //work() is invoked from the gsp page each time the browser is refreshed.
+        //we don't want multiple workers, so each worker gets a worker number.
+        //if the worker number doesn't match the number of workers, then
+        //the worker exits.
+        def iamworker = ++workers
 
         //s/m: this can be made more groovy, right? spread operator?
         for (int i=0; i<NUM_COLORFUL_DISPLAY_DOTS; i++) {
             q[i] = new TestVector(piazzaBox, externalUserService)
         }
 
+        //This is an arbitrarily large number. We might as well loop forever.
+        def MAX_ITERATION_TO_CALL_TEST_VECTOR = 64000
+
         (0..MAX_ITERATION_TO_CALL_TEST_VECTOR).each {
-            if (it % 4 == 0) {
-                println "iteration $it"
-                qhealth[0] = new HealthArray()
-            }
-            for (int i=0; i<NUM_COLORFUL_DISPLAY_DOTS; i++) {
-                q[i].nextstep()
+            if (iamworker == workers) {
+                def HEALTH_CHECK_SERVICES_EVERY_SO_OFTEN = 20
+                if (it % HEALTH_CHECK_SERVICES_EVERY_SO_OFTEN == 0) {
+                    qhealth[0] = new HealthArray()
+                }
+                for (int i=0; i<NUM_COLORFUL_DISPLAY_DOTS; i++) {
+                    q[i].nextstep()
+                }
             }
         }
-        render "C.work()999"
+        render "work()#$iamworker exits (num workers is $workers)"
     }
 
     def dots() { 
@@ -95,17 +104,21 @@ class TimerController {
        String s = ''
 
        if (qhealth[0]) {
-          s += (qhealth[0].port8079)? rand.nextInt(1111) : 'A'
+          //For healthy services, return a random number (because their
+          //continual updating indicates that monitoring activity is
+          //taking place). That eliminates the need to create a fancy
+          //page GUI design.
+          s += (qhealth[0].port8079)? rand.nextInt(1111) : 'nexus?'
           s += ','
-          s += (qhealth[0].port8081)? rand.nextInt(1111) : 'B'
+          s += (qhealth[0].port8081)? rand.nextInt(1111) : 'gateway?'
           s += ','
-          s += (qhealth[0].port8083)? rand.nextInt(1111) : 'C'
+          s += (qhealth[0].port8083)? rand.nextInt(1111) : 'jobmanager?'
           s += ','
-          s += (qhealth[0].port8084)? rand.nextInt(1111) : 'D'
+          s += (qhealth[0].port8084)? rand.nextInt(1111) : 'ingest?'
           s += ','
-          s += (qhealth[0].port8085)? rand.nextInt(1111) : 'E'
+          s += (qhealth[0].port8085)? rand.nextInt(1111) : 'access?'
           s += ','
-          s += (qhealth[0].port8088)? rand.nextInt(1111) : 'F'
+          s += (qhealth[0].port8088)? rand.nextInt(1111) : 'servicecontroller?'
        }
        s
     }

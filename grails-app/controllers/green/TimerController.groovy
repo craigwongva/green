@@ -50,7 +50,7 @@ class TimerController {
         def MAX_ITERATION_TO_CALL_TEST_VECTOR = 64000
 
         (0..MAX_ITERATION_TO_CALL_TEST_VECTOR).each {
-            if (iamworker == workers) {
+            if ((iamworker == workers) && (!booleanOfDotCompletion())) {
                 def HEALTH_CHECK_SERVICES_EVERY_SO_OFTEN = 10
                 if (it % HEALTH_CHECK_SERVICES_EVERY_SO_OFTEN == 0) {
                     qhealth[0] = new HealthArray()
@@ -108,26 +108,37 @@ class TimerController {
           //continual updating indicates that monitoring activity is
           //taking place). That eliminates the need to create a fancy
           //page GUI design.
-          s += (qhealth[0].port8079)? rand.nextInt(1111) : 'nexus?'
-          s += ','
-          s += (qhealth[0].port8081)? rand.nextInt(1111) : 'gateway?'
-          s += ','
-          s += (qhealth[0].port8083)? rand.nextInt(1111) : 'jobmanager?'
-          s += ','
-          s += (qhealth[0].port8084)? rand.nextInt(1111) : 'ingest?'
-          s += ','
-          s += (qhealth[0].port8085)? rand.nextInt(1111) : 'access?'
-          s += ','
-          s += (qhealth[0].port8088)? rand.nextInt(1111) : 'servicecontroller?'
+          //was 'rand.nextInt(1111)', now is ''
+          s += (qhealth[0].port8079)? '' : 'nexus?'
+          //s += ','
+          s += (qhealth[0].port8081)? '' : 'pz-gateway?'
+          //s += ','
+          s += (qhealth[0].port8083)? '' : 'pz-jobmanager?'
+          //s += ','
+          s += (qhealth[0].port8084)? '' : 'pz-ingest?'
+          //s += ','
+          s += (qhealth[0].port8085)? '' : 'pz-access?'
+          //s += ','
+          s += (qhealth[0].port8088)? '' : 'pz-servicecontroller?'
        }
        s
+    }
+
+    boolean booleanOfDotCompletion() {
+       stringOfDotStatusEachRepresentsAPiazzaJob() == '4'.multiply(NUM_COLORFUL_DISPLAY_DOTS)
+    }
+
+    String stringOfDotCompletion() {
+       booleanOfDotCompletion()? 'completed' : 'active'
+       booleanOfDotCompletion()? '' : ''
     }
 
     def status() {
         render(contentType: 'text/json') {[
             'dotStatus': stringOfDotStatusEachRepresentsAPiazzaJob(),
             'dotDuration': stringOfDotDurationEachRepresentsAPiazzaJob(),
-            'squareHealth': stringOfSquareHealthEachRepresentsAContainerOrProcess()
+            'squareHealth': stringOfSquareHealthEachRepresentsAContainerOrProcess(),
+            'dotCompletion': stringOfDotCompletion()
         ]}
     }
 
@@ -256,7 +267,7 @@ class TestVector {
 
         def myprocess2 = [ 'bash', '-c', "curl -v -k -X POST -H \"Content-Type: application/json\" -d '${body2}' http://$PIAZZA_PRIME_BOX:8081/service" ].execute()
         myprocess2.waitFor()
-        String myprocess2AsText =  myprocess2.text
+        String myprocess2AsText =  myprocess2?.text
 
         def result2AsJson = null
         try { result2AsJson = new JsonSlurper().parseText(myprocess2AsText) } catch(e) {}
@@ -269,11 +280,11 @@ class TestVector {
 
         def result3AsJson = null
         def body3 = '{"type":"execute-service","data":{"serviceId":"REPLACEME","dataInputs":{},"dataOutput":[{"mimeType":"application/json","type":"text"}]}}'
-        body3 = body3.replaceAll('REPLACEME', id1.data.serviceId)
-
-        def myprocess3 = [ 'bash', '-c', "curl -v -k -X POST -H \"Content-Type: application/json\" -d '${body3}' http://$PIAZZA_PRIME_BOX:8081/job" ].execute()
-
         try {
+           body3 = body3.replaceAll('REPLACEME', id1?.data?.serviceId)
+
+           def myprocess3 = [ 'bash', '-c', "curl -v -k -X POST -H \"Content-Type: application/json\" -d '${body3}' http://$PIAZZA_PRIME_BOX:8081/job" ].execute()
+
            String myprocess3AsText =  myprocess3.text
 
            result3AsJson = new JsonSlurper().parseText(myprocess3AsText) 

@@ -98,6 +98,10 @@ class TimerController {
        s
     }
 
+    def string() {
+        render stringOfDotStatusEachRepresentsAPiazzaJob()
+    }
+
     String stringOfSquareHealthEachRepresentsAContainerOrProcess() {
         Random rand = new Random()  
        

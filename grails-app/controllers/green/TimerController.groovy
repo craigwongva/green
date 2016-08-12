@@ -137,7 +137,7 @@ println "zdots()"
     }
 
     def string() {
-        render stringOfDotStatusEachRepresentsAPiazzaJob()
+        render stringOfDotStatusEachRepresentsAPiazzaJob() + '\n'
     }
 
     String stringOfSquareHealthEachRepresentsAContainerOrProcess() {

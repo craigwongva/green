@@ -63,10 +63,48 @@ class TimerController {
         render "work()#$iamworker exits (num workers is $workers)"
     }
 
+    def zwork() {
+
+        //work() is invoked from the gsp page each time the browser is refreshed.
+        //we don't want multiple workers, so each worker gets a worker number.
+        //if the worker number doesn't match the number of workers, then
+        //the worker exits.
+        def iamworker = ++workers
+
+        //s/m: this can be made more groovy, right? spread operator?
+        for (int i=0; i<NUM_COLORFUL_DISPLAY_DOTS; i++) {
+            q[i] = new TestVector(piazzaBox, externalUserService)
+        }
+
+        //This is an arbitrarily large number. We might as well loop forever.
+        def MAX_ITERATION_TO_CALL_TEST_VECTOR = 64000
+
+        (0..MAX_ITERATION_TO_CALL_TEST_VECTOR).each {
+            if ((iamworker == workers) && (!booleanOfDotCompletion())) {
+                def HEALTH_CHECK_SERVICES_EVERY_SO_OFTEN = 10
+                if (it % HEALTH_CHECK_SERVICES_EVERY_SO_OFTEN == 0) {
+                    qhealth[0] = new HealthArray()
+                }
+                for (int i=0; i<NUM_COLORFUL_DISPLAY_DOTS; i++) {
+                    q[i].nextstep()
+                }
+            }
+        }
+    }
+
     def dots() { 
+println "dots()"
         piazzaBox = (params.containers) ?: myIP()
         externalUserService = myIP()
     }
+    def zdots() { 
+println "zdots()"
+        piazzaBox = (params.containers) ?: myIP()
+        externalUserService = myIP()
+        zwork()
+        string()
+    }
+
 
     String stringOfDotStatusEachRepresentsAPiazzaJob() {
        String s = ''

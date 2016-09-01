@@ -50,10 +50,11 @@ class TimerController {
         def MAX_ITERATION_TO_CALL_TEST_VECTOR = 64000
 
         (0..MAX_ITERATION_TO_CALL_TEST_VECTOR).each {
+            println "$it"
             if ((iamworker == workers) && (!booleanOfDotCompletion())) {
                 def HEALTH_CHECK_SERVICES_EVERY_SO_OFTEN = 10
                 if (it % HEALTH_CHECK_SERVICES_EVERY_SO_OFTEN == 0) {
-                    qhealth[0] = new HealthArray()
+                    qhealth[0] = new HealthArray(piazzaBox)
                 }
                 for (int i=0; i<NUM_COLORFUL_DISPLAY_DOTS; i++) {
                     q[i].nextstep()
@@ -196,6 +197,7 @@ println "zdots()"
 
 class HealthArray {
     def myip
+    def piazzaBox
     def port8079
     def port8081
     def port8083
@@ -203,8 +205,9 @@ class HealthArray {
     def port8085
     def port8088
 
-    HealthArray() {
+    HealthArray(pzbox) {
        myip = myIP()
+       piazzaBox = pzbox
        port8079 = test8079()
        port8081 = test8081()
        port8083 = test8083()
@@ -222,42 +225,42 @@ class HealthArray {
     }
 
     boolean test8079() {
-        def myprocess = [ 'bash', '-c', "curl --max-time 3 http://$myip:8079" ].execute()
+        def myprocess = [ 'bash', '-c', "curl --max-time 3 http://$piazzaBox:8079" ].execute()
         myprocess.waitFor()
         String myprocessAsText = myprocess.text
         myprocessAsText.indexOf('Nexus') > 0
     }
 
     boolean test8081() {
-        def myprocess = [ 'bash', '-c', "curl --max-time 3 http://$myip:8081" ].execute()
+        def myprocess = [ 'bash', '-c', "curl --max-time 3 http://$piazzaBox:8081" ].execute()
         myprocess.waitFor()
         String myprocessAsText = myprocess.text
         myprocessAsText.indexOf('pz-gateway') > 0
     }
 
     boolean test8083() {
-        def myprocess = [ 'bash', '-c', "curl --max-time 3 http://$myip:8083" ].execute()
+        def myprocess = [ 'bash', '-c', "curl --max-time 3 http://$piazzaBox:8083" ].execute()
         myprocess.waitFor()
         String myprocessAsText = myprocess.text
         myprocessAsText.indexOf('pz-jobmanager') > 0
     }
 
     boolean test8084() {
-        def myprocess = [ 'bash', '-c', "curl --max-time 3 http://$myip:8084" ].execute()
+        def myprocess = [ 'bash', '-c', "curl --max-time 3 http://$piazzaBox:8084" ].execute()
         myprocess.waitFor()
         String myprocessAsText = myprocess.text
         myprocessAsText.indexOf('Loader') > 0
     }
 
     boolean test8085() {
-        def myprocess = [ 'bash', '-c', "curl --max-time 3 http://$myip:8085" ].execute()
+        def myprocess = [ 'bash', '-c', "curl --max-time 3 http://$piazzaBox:8085" ].execute()
         myprocess.waitFor()
         String myprocessAsText = myprocess.text
         myprocessAsText.indexOf('pz-access') > 0
     }
 
     boolean test8088() {
-        def myprocess = [ 'bash', '-c', "curl --max-time 3 http://$myip:8088" ].execute()
+        def myprocess = [ 'bash', '-c', "curl --max-time 3 http://$piazzaBox:8088" ].execute()
         myprocess.waitFor()
         String myprocessAsText = myprocess.text
         myprocessAsText.indexOf('Piazza Service Controller') > 0

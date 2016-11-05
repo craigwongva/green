@@ -50,7 +50,7 @@ class TimerController {
         def MAX_ITERATION_TO_CALL_TEST_VECTOR = 64000
 
         (0..MAX_ITERATION_TO_CALL_TEST_VECTOR).each {
-            println "$it"
+            //println "$it"
             if ((iamworker == workers) && (!booleanOfDotCompletion())) {
                 def HEALTH_CHECK_SERVICES_EVERY_SO_OFTEN = 10
                 if (it % HEALTH_CHECK_SERVICES_EVERY_SO_OFTEN == 0) {
@@ -94,12 +94,12 @@ class TimerController {
     }
 
     def dots() { 
-println "dots()"
+	//println "dots()"
         piazzaBox = (params.containers) ?: myIP()
         externalUserService = myIP()
     }
     def zdots() { 
-println "zdots()"
+	//println "zdots()"
         piazzaBox = (params.containers) ?: myIP()
         externalUserService = myIP()
         zwork()

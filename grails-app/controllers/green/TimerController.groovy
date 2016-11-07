@@ -61,9 +61,9 @@ class TimerController {
                 }
             }
         }
-        render "work()#$iamworker exits (num workers is $workers)"
+        //render "work()#$iamworker exits (num workers is $workers)"
     }
-
+/*
     def zwork() {
 
         //work() is invoked from the gsp page each time the browser is refreshed.
@@ -92,7 +92,7 @@ class TimerController {
             }
         }
     }
-
+*/
     def dots() { 
 	//println "dots()"
         piazzaBox = (params.containers) ?: myIP()
@@ -102,7 +102,8 @@ class TimerController {
 	//println "zdots()"
         piazzaBox = (params.containers) ?: myIP()
         externalUserService = myIP()
-        zwork()
+        //zwork()
+        work()
         string()
     }
 
@@ -138,7 +139,7 @@ class TimerController {
     }
 
     def string() {
-        render stringOfDotStatusEachRepresentsAPiazzaJob() + '\n'
+        render stringOfDotStatusEachRepresentsAPiazzaJob() + '\n' + stringOfDotDurationEachRepresentsAPiazzaJob() + '\n'
     }
 
     String stringOfSquareHealthEachRepresentsAContainerOrProcess() {

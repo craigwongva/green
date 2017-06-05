@@ -202,7 +202,7 @@
 	</pluginRepository>
 </pluginRepositories>
 -->
-  
+<!--  
   <profiles>
     <profile>
       <id>tools</id>
@@ -224,4 +224,5 @@
       </dependencies>
     </profile>
   </profiles>
+-->
 </project>

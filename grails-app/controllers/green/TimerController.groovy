@@ -279,7 +279,7 @@ class TestVector {
     def id5
 
     TestVector(dummy1, dummy2) {
-        EXTERNAL_USER_SERVICE = "http://$dummy2:8078/green/timer/external"
+        EXTERNAL_USER_SERVICE = "http://$dummy2:8080/green/timer/external" //grails -Dserver.port=8078 run-app
         PIAZZA_PRIME_BOX = dummy1
     }
 

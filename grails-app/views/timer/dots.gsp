@@ -21,7 +21,7 @@
    var COLS_PER_SQUARE = ROWS_PER_SQUARE
    var ORIGINX = 40
    var ORIGINY = 100
-   var STOPLIGHT_YELLOW = '#FAD201'
+   var STOPLIGHT_YELLOW = 'orange' //'#FAD201'
    var STOPLIGHT_GREEN = '#27E833'
    var MEDIUM_GREEN =    '#27C833'
    var DARK_GREEN =      '#27A833'  

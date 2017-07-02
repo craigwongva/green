@@ -15,8 +15,8 @@ node {
     }
 */
     stage('cf') {
-        sh "aws cloudformation create-stack --stack-name craigt43 --template-url https://s3.amazonaws.com/venicegeo-devops-dev-gocontainer-project/cf-nexus-java.json --region us-west-2 --parameters ParameterKey=nexususername,ParameterValue=unused ParameterKey=nexuspassword,ParameterValue=unused ParameterKey=tomcatmgrpassword,ParameterValue=unused"
-        sh "sleep 60"
+//        sh "aws cloudformation create-stack --stack-name craigt43 --template-url https://s3.amazonaws.com/venicegeo-devops-dev-gocontainer-project/cf-nexus-java.json --region us-west-2 --parameters ParameterKey=nexususername,ParameterValue=unused ParameterKey=nexuspassword,ParameterValue=unused ParameterKey=tomcatmgrpassword,ParameterValue=unused"
+//        sh "sleep 60"
 
         def x = sh(script: "aws cloudformation describe-stacks --stack-name craigt43 --region us-west-2", returnStdout: true)
         def temp = (x =~ /"OutputValue": "(.*)"/)
@@ -25,7 +25,7 @@ node {
     }
     stage('cf-shell1') {
 //sh "echo sleep 25*60 = 25 minutes"
-sh "sleep 1500"
+//sh "sleep 1500"
 sh "echo starting to invoke $craigt42_InstanceID"
 sh "cat invoke-phantom.js"
 sh "#BUILD_ID=dontKillMe ./invoke-phantom ${craigt42_InstanceID} &"

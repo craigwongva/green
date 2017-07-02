@@ -1,1 +1,5 @@
-println 'hello'.indexOf('e')
+node {
+    stage('indexof') {
+	println 'hello'.indexOf('e')
+    }
+}

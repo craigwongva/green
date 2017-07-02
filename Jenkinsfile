@@ -14,6 +14,7 @@ node {
         sh """scp -i /home/jenkins/craigradiantblueoregon.pem -o StrictHostKeyChecking=no /var/lib/jenkins/.m2/repository/com/demo/green/1.0-SNAPSHOT/green-1.0-SNAPSHOT.war ec2-user@35.160.37.166:/usr/share/tomcat7/webapps/green.war""" 
     }
 */
+/*
     stage('cf') {
 //        sh "aws cloudformation create-stack --stack-name craigt43 --template-url https://s3.amazonaws.com/venicegeo-devops-dev-gocontainer-project/cf-nexus-java.json --region us-west-2 --parameters ParameterKey=nexususername,ParameterValue=unused ParameterKey=nexuspassword,ParameterValue=unused ParameterKey=tomcatmgrpassword,ParameterValue=unused"
 //        sh "sleep 60"
@@ -34,10 +35,11 @@ sh "cat invoke-phantom.js"
 sh "echo finished invoke"
 //sh "sleep 60"
     }
+*/
     stage('cf-groovy1') {
 //sleep(1000*60*2) why is this a day plus? Overridden Groovy sleep???
 //println System.getenv('craigt42_InstanceID')
-sleep(60)
+//sleep(60)
 def mickey = [
  "curl",  
 ////  "${System.getenv('craigt42_InstanceID')}:8080/green/timer/status"]

@@ -23,6 +23,7 @@ node {
         def temp = (x =~ /"OutputValue": "(.*)"/)
         craigt42_InstanceID = temp[0][1]
         println "alpha $craigt42_InstanceID"
+	println "triscuit " + 'hello'.indexOf('e')
     }
 /*
     stage('cf-shell1') {
@@ -41,6 +42,7 @@ sh "echo finished invoke"
 //sleep(1000*60*2) why is this a day plus? Overridden Groovy sleep???
 //println System.getenv('craigt42_InstanceID')
 println "$craigt42_InstanceID burgers"
+println "oreo " + 'hello'.indexOf('e')
 //sleep(60)
 def mickey = [
  "curl",  
@@ -55,6 +57,7 @@ def GREEN_DOT_STATUS_DONE = '4'
 //fails: if (mickey.indexOf(GREEN_DOT_STATUS_DONE.multiply(ARBITRARY_SUCCESS_PCT*NUM_GREEN_DOTS)) < 0) {
 //succeeds: if (mickey.indexOf('4'.multiply(95)) < 0) {
 
+println "licorice " + 'hello'.indexOf('e')
 if (mickey.indexOf('4444444444444444444444444444444444444444444444444444444444') < 0) {
 //if (mickey.indexOf(GREEN_DOT_STATUS_DONE.multiply(ARBITRARY_SUCCESS_PCT*NUM_GREEN_DOTS)) < 0) {
     error "red rover" 

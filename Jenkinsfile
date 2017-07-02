@@ -39,6 +39,7 @@ sh "echo finished invoke"
     stage('cf-groovy1') {
 //sleep(1000*60*2) why is this a day plus? Overridden Groovy sleep???
 //println System.getenv('craigt42_InstanceID')
+println "$craigt42_InstanceID burgers"
 //sleep(60)
 def mickey = [
  "curl",  

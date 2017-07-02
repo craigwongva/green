@@ -50,14 +50,14 @@ println "Mickey is $mickey"
 def ARBITRARY_SUCCESS_PCT = 0.95
 def NUM_GREEN_DOTS = 100
 def GREEN_DOT_STATUS_DONE = '4'
-/*
+
 if (mickey.indexOf(GREEN_DOT_STATUS_DONE.multiply(ARBITRARY_SUCCESS_PCT*NUM_GREEN_DOTS)) < 0) {
     error "red rover" 
     
 }
 
 //somehow next shell this: pkill -f phantomjs
-*/
+
     }
 
 }

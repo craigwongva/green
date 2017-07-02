@@ -14,7 +14,6 @@ node {
         sh """scp -i /home/jenkins/craigradiantblueoregon.pem -o StrictHostKeyChecking=no /var/lib/jenkins/.m2/repository/com/demo/green/1.0-SNAPSHOT/green-1.0-SNAPSHOT.war ec2-user@35.160.37.166:/usr/share/tomcat7/webapps/green.war""" 
     }
 */
-/*
     stage('cf') {
 //        sh "aws cloudformation create-stack --stack-name craigt43 --template-url https://s3.amazonaws.com/venicegeo-devops-dev-gocontainer-project/cf-nexus-java.json --region us-west-2 --parameters ParameterKey=nexususername,ParameterValue=unused ParameterKey=nexuspassword,ParameterValue=unused ParameterKey=tomcatmgrpassword,ParameterValue=unused"
 //        sh "sleep 60"
@@ -24,6 +23,7 @@ node {
         craigt42_InstanceID = temp[0][1]
         println "alpha $craigt42_InstanceID"
     }
+/*
     stage('cf-shell1') {
 //sh "echo sleep 25*60 = 25 minutes"
 //sh "sleep 1500"

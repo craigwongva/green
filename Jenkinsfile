@@ -11,7 +11,7 @@ node {
     stage('deploy') { 
         sh "whoami" 
         sh "pwd" 
-        sh """scp -i /home/jenkins/craigradiantblueoregon.pem -o StrictHostKeyChecking=no /var/lib/jenkins/.m2/repository/com/demo/green/1.0-SNAPSHOT/green-1.0-SNAPSHOT.war ec2-user@34.210.232.195:/usr/share/tomcat7/webapps/green.war""" 
+        //hide because pem isn't available temporarily: sh """scp -i /home/jenkins/craigradiantblueoregon.pem -o StrictHostKeyChecking=no /var/lib/jenkins/.m2/repository/com/demo/green/1.0-SNAPSHOT/green-1.0-SNAPSHOT.war ec2-user@34.210.232.195:/usr/share/tomcat7/webapps/green.war""" 
     }
     stage('cf') {
         sh "aws cloudformation create-stack --stack-name craigt44 --template-url https://s3.amazonaws.com/venicegeo-devops-dev-gocontainer-project/cf-nexus-java.json --region us-west-2 --parameters ParameterKey=nexususername,ParameterValue=unused ParameterKey=nexuspassword,ParameterValue=unused ParameterKey=tomcatmgrpassword,ParameterValue=unused"

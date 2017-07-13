@@ -64,4 +64,9 @@ if (mickey.indexOf('4444444444444444444444444444444444444444444444444444444444')
         sh "pwd" 
         sh """scp -i /home/jenkins/craigradiantblueoregon.pem -o StrictHostKeyChecking=no /var/lib/jenkins/.m2/repository/com/demo/green/1.0-SNAPSHOT/green-1.0-SNAPSHOT.war ec2-user@34.210.232.195:/usr/share/tomcat7/webapps/green.war""" 
     }
+
+    stage('cleanup') { 
+        sh "pkill -f phantomjs"
+        sh "aws cloudformation delete-stack --stack-name craigt44"
+    }
 }

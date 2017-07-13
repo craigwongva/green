@@ -67,6 +67,6 @@ if (mickey.indexOf('4444444444444444444444444444444444444444444444444444444444')
 
     stage('cleanup') { 
         sh "pkill -f phantomjs"
-        sh "aws cloudformation delete-stack --stack-name craigt44"
+        sh "aws cloudformation delete-stack --stack-name craigt44 --region us-west-2"
     }
 }

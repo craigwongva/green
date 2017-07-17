@@ -42,14 +42,14 @@ node {
         sh "/usr/local/apache-maven/bin/mvn clean -DskipTests install"
     } 
     stage('deploy') { 
-	def PRODUCTION_STACK_IP = '34.212.127.84'
+	def PRODUCTION_STACK_IP = '52.26.239.235'
         sh "whoami" 
         sh "pwd" 
         sh "scp -i /home/jenkins/craigradiantblueoregon.pem -o StrictHostKeyChecking=no /var/lib/jenkins/.m2/repository/com/demo/green/1.0-SNAPSHOT/green-1.0-SNAPSHOT.war ec2-user@${PRODUCTION_STACK_IP}:/usr/share/tomcat7/webapps/green.war" 
     }
     stage('cleanup') { 
-	def PRODUCTION_STACK_NAME = 'craigt50'
+	def PRODUCTION_STACK_NAME = 'craigt51'
         sh "pkill -f phantomjs"
-        sh "aws cloudformation delete-stack --stack-name craigt50 --region us-west-2"
+        sh "aws cloudformation delete-stack --stack-name craigt51 --region us-west-2"
     }
 }

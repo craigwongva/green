@@ -13,6 +13,7 @@ node {
         craigt42_InstanceID = temp[0][1]
     }
     stage('cf-shell1') {
+	sh "sleep 1500"
 	sh "cat invoke-phantom.js"
 	sh "BUILD_ID=dontKillMe ./invoke-phantom $craigt42_InstanceID &"
 	sh "cat invoke-phantom.js"

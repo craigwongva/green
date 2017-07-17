@@ -45,7 +45,7 @@ node {
 	def PRODUCTION_STACK_IP = '34.212.127.84'
         sh "whoami" 
         sh "pwd" 
-        sh "scp -i /home/jenkins/craigradiantblueoregon.pem -o StrictHostKeyChecking=no /var/lib/jenkins/.m2/repository/com/demo/green/1.0-SNAPSHOT/green-1.0-SNAPSHOT.war ec2-user@${PRODUCTION_STACK_ID}:/usr/share/tomcat7/webapps/green.war" 
+        sh "scp -i /home/jenkins/craigradiantblueoregon.pem -o StrictHostKeyChecking=no /var/lib/jenkins/.m2/repository/com/demo/green/1.0-SNAPSHOT/green-1.0-SNAPSHOT.war ec2-user@${PRODUCTION_STACK_IP}:/usr/share/tomcat7/webapps/green.war" 
     }
     stage('cleanup') { 
 	def PRODUCTION_STACK_NAME = 'craigt50'

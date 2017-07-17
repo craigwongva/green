@@ -5,10 +5,11 @@ node {
         checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/craigwongva/green']]]) 
     } 
     stage('cf') {
-        sh "aws cloudformation create-stack --stack-name craigt44 --template-url https://s3.amazonaws.com/venicegeo-devops-dev-gocontainer-project/cf-nexus-java.json --region us-west-2 --parameters ParameterKey=nexususername,ParameterValue=unused ParameterKey=nexuspassword,ParameterValue=unused ParameterKey=tomcatmgrpassword,ParameterValue=unused"
+        def TEST_STACK_NAME = 'craigt53'
+        sh "aws cloudformation create-stack --stack-name ${TEST_STACK_NAME} --template-url https://s3.amazonaws.com/venicegeo-devops-dev-gocontainer-project/cf-nexus-java.json --region us-west-2 --parameters ParameterKey=nexususername,ParameterValue=unused ParameterKey=nexuspassword,ParameterValue=unused ParameterKey=tomcatmgrpassword,ParameterValue=unused"
         sh "sleep 60"
 
-        def x = sh(script: "aws cloudformation describe-stacks --stack-name craigt44 --region us-west-2", returnStdout: true)
+        def x = sh(script: "aws cloudformation describe-stacks --stack-name ${TEST_STACK_NAME} --region us-west-2", returnStdout: true)
         def temp = (x =~ /"OutputValue": "(.*)"/)
         craigt42_InstanceID = temp[0][1]
     }

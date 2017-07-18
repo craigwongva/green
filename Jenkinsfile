@@ -1,11 +1,12 @@
 node { 
     def mvn = tool 'M3.0.5' 
-    def craigt42_InstanceID 
+    def TEST_STACK_NAME = 'craigt53'
+    def PRODUCTION_STACK_IP = '34.223.205.218'
+    def craigt42_InstanceID  //TEST_STACK_IP
     stage('checkout') {
         checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/craigwongva/green']]]) 
     } 
     stage('cf') {
-        def TEST_STACK_NAME = 'craigt53'
         sh "aws cloudformation create-stack --stack-name ${TEST_STACK_NAME} --template-url https://s3.amazonaws.com/venicegeo-devops-dev-gocontainer-project/cf-nexus-java.json --region us-west-2 --parameters ParameterKey=nexususername,ParameterValue=unused ParameterKey=nexuspassword,ParameterValue=unused ParameterKey=tomcatmgrpassword,ParameterValue=unused"
         sh "sleep 60"
 
@@ -43,14 +44,12 @@ node {
         sh "/usr/local/apache-maven/bin/mvn clean -DskipTests install"
     } 
     stage('deploy') { 
-	def PRODUCTION_STACK_IP = '34.223.205.218'
         sh "whoami" 
         sh "pwd" 
         sh "scp -i /home/jenkins/craigradiantblueoregon.pem -o StrictHostKeyChecking=no /var/lib/jenkins/.m2/repository/com/demo/green/1.0-SNAPSHOT/green-1.0-SNAPSHOT.war ec2-user@${PRODUCTION_STACK_IP}:/usr/share/tomcat7/webapps/green.war" 
     }
     stage('cleanup') { 
-	def PRODUCTION_STACK_NAME = 'craigt44'
         sh "pkill -f phantomjs"
-        sh "aws cloudformation delete-stack --stack-name ${PRODUCTION_STACK_NAME}  --region us-west-2"
+        sh "aws cloudformation delete-stack --stack-name ${TEST_STACK_NAME}  --region us-west-2"
     }
 }

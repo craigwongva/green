@@ -23,11 +23,15 @@ println "2003"
 println "2004"
         TEST_STACK_IP = temp[0][1]
 println "2005"
-	sh "sleep 1500"
+	//sh "sleep 1500"
         }
     }
 
     stage('invokePhantomOnApp') {
+println "2006"
+	//sh "sleep 1500"
+	sh "sleep 15"
+println "2007"
 	sh "cat invoke-phantom.js"
 	//sh "BUILD_ID=dontKillMe ./invoke-phantom $anceID &"
 	sh "BUILD_ID=dontKillMe ./invoke-phantom $TEST_STACK_IP &"

@@ -14,10 +14,15 @@ node {
     }
 
     stage('describeTestInstanceAndWait') {
+println "2001"
 	if (TEST_STACK_IP == '') {
+println "2002"
         def x = sh(script: "aws cloudformation describe-stacks --stack-name ${TEST_STACK_NAME} --region us-west-2", returnStdout: true)
+println "2003"
         def temp = (x =~ /"OutputValue": "(.*)"/)
+println "2004"
         TEST_STACK_IP = temp[0][1]
+println "2005"
 	sh "sleep 1500"
         }
     }

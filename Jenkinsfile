@@ -9,25 +9,13 @@ node {
         checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/craigwongva/green']]]) 
     } 
     stage('buildTestInstanceAndApp') {
-//	if (params.test_stack_ip == 'buildit') {
-            echo "You said 'buildit' so I'll build a test instance"
-            sh "aws cloudformation create-stack --stack-name ${TEST_STACK_NAME} --template-url https://s3.amazonaws.com/venicegeo-devops-dev-gocontainer-project/cf-nexus-java.json --region us-west-2 --parameters ParameterKey=nexususername,ParameterValue=unused ParameterKey=nexuspassword,ParameterValue=unused ParameterKey=tomcatmgrpassword,ParameterValue=unused"
-            sh "sleep 60"
+        sh "aws cloudformation create-stack --stack-name ${TEST_STACK_NAME} --template-url https://s3.amazonaws.com/venicegeo-devops-dev-gocontainer-project/cf-nexus-java.json --region us-west-2 --parameters ParameterKey=nexususername,ParameterValue=unused ParameterKey=nexuspassword,ParameterValue=unused ParameterKey=tomcatmgrpassword,ParameterValue=unused"
+        sh "sleep 60"
 
-            def x = sh(script: "aws cloudformation describe-stacks --stack-name ${TEST_STACK_NAME} --region us-west-2", returnStdout: true)
-println "k1000"
-            def temp = (x =~ /"OutputValue": "(.*)"/)
-println "k1001"
-            craigt42_InstanceID = temp[0][1]
-println "k1002"
-	    sh "sleep 1500"
-//println "k1003"
-//        }
-
-//println "k1004"
-//	if (params.test_stack_ip != 'buildit') {
-//            craigt42_InstanceID = params.test_stack_ip
-//      }
+        def x = sh(script: "aws cloudformation describe-stacks --stack-name ${TEST_STACK_NAME} --region us-west-2", returnStdout: true)
+        def temp = (x =~ /"OutputValue": "(.*)"/)
+        craigt42_InstanceID = temp[0][1]
+	sh "sleep 1500"
     }
     stage('triggerTestServices') {
 	sh "cat invoke-phantom.js"

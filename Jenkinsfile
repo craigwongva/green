@@ -29,8 +29,7 @@ println "2005"
 
     stage('invokePhantomOnApp') {
 println "2006"
-	//sh "sleep 1500"
-	sh "sleep 15"
+	sh "sleep 1500"
 println "2007"
 	sh "cat invoke-phantom.js"
 	//sh "BUILD_ID=dontKillMe ./invoke-phantom $anceID &"

@@ -14,10 +14,10 @@ node {
         def x = sh(script: "aws cloudformation describe-stacks --stack-name ${TEST_STACK_NAME} --region us-west-2", returnStdout: true)
         def temp = (x =~ /"OutputValue": "(.*)"/)
         TEST_STACK_IP = temp[0][1]
+	sh "sleep 1500"
         }
     }
     stage('invokePhantom') {
-	sh "sleep 1500"
 	sh "cat invoke-phantom.js"
 	//sh "BUILD_ID=dontKillMe ./invoke-phantom $anceID &"
 	sh "BUILD_ID=dontKillMe ./invoke-phantom $TEST_STACK_IP &"

@@ -2,7 +2,7 @@ node {
     def mvn = tool 'M3.0.5' 
     def TEST_STACK_NAME = 'craigt44'
     def test_stack_status = 'borrow'
-    def TEST_STACK_IP = '' //'35.161.244.46' 
+    def TEST_STACK_IP = '34.212.143.54' //'35.161.244.46' 
     def PRODUCTION_STACK_IP = '35.161.244.46'
 
     stage('checkout') {

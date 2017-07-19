@@ -65,6 +65,6 @@ node {
     }
     stage('cleanup') { 
         sh "pkill -f phantomjs"
-        sh "aws cloudformation delete-stack --stack-name ${TEST_STACK_NAME}  --region us-west-2"
+        //sh "aws cloudformation delete-stack --stack-name ${TEST_STACK_NAME}  --region us-west-2"
     }
 }

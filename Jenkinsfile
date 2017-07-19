@@ -2,38 +2,26 @@ node {
     def mvn = tool 'M3.0.5' 
     def TEST_STACK_NAME = 'craigt44'
     def PRODUCTION_STACK_IP = '35.161.244.46'
-    def craigt42_InstanceID = '35.161.244.46'  //TEST_STACK_IP
-
-//    properties([parameters([string(defaultValue: 'buildit', description: 'Enter test stack IP or buildit', name: 'test_stack_ip')])])
+    def craigt42_InstanceID  //TEST_STACK_IP
     stage('checkout') {
         checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/craigwongva/green']]]) 
     } 
+    stage('cf') {
+        sh "aws cloudformation create-stack --stack-name ${TEST_STACK_NAME} --template-url https://s3.amazonaws.com/venicegeo-devops-dev-gocontainer-project/cf-nexus-java.json --region us-west-2 --parameters ParameterKey=nexususername,ParameterValue=unused ParameterKey=nexuspassword,ParameterValue=unused ParameterKey=tomcatmgrpassword,ParameterValue=unused"
+        sh "sleep 60"
 
-    stage('buildTestInstanceAndApp') {
-//	if (params.test_stack_ip == 'buildit') {
-            echo "You said 'buildit' so I'll build a test instance"
-            sh "aws cloudformation create-stack --stack-name ${TEST_STACK_NAME} --template-url https://s3.amazonaws.com/venicegeo-devops-dev-gocontainer-project/cf-nexus-java.json --region us-west-2 --parameters ParameterKey=nexususername,ParameterValue=unused ParameterKey=nexuspassword,ParameterValue=unused ParameterKey=tomcatmgrpassword,ParameterValue=unused"
-            sh "sleep 60"
-
-            def x = sh(script: "aws cloudformation describe-stacks --stack-name ${TEST_STACK_NAME} --region us-west-2", returnStdout: true)
-            def temp = (x =~ /"OutputValue": "(.*)"/)
-            craigt42_InstanceID = temp[0][1]
-	    sh "sleep 1500"
-//        }
-/*
-	if (params.test_stack_ip != 'buildit') {
-            craigt42_InstanceID = params.test_stack_ip
-        }
-*/
+        def x = sh(script: "aws cloudformation describe-stacks --stack-name ${TEST_STACK_NAME} --region us-west-2", returnStdout: true)
+        def temp = (x =~ /"OutputValue": "(.*)"/)
+        craigt42_InstanceID = temp[0][1]
     }
-
-    stage('triggerTestServices') {
+    stage('cf-shell1') {
+	sh "sleep 1500"
 	sh "cat invoke-phantom.js"
 	sh "BUILD_ID=dontKillMe ./invoke-phantom $craigt42_InstanceID &"
 	sh "cat invoke-phantom.js"
 	sh "sleep 60"
     }
-    stage('testAndInterpret') {
+    stage('cf-groovy1') {
 	//sleep(1000*60*2) why is this a day plus? Overridden Groovy sleep???
 	def mickey = [
 	 "curl",  
@@ -52,10 +40,10 @@ node {
 	}
 	//somehow next shell this: pkill -f phantomjs
     }
-    stage('rebuildApp') { 
+    stage('build') { 
         sh "/usr/local/apache-maven/bin/mvn clean -DskipTests install"
     } 
-    stage('deployAppToProd') { 
+    stage('deploy') { 
         sh "whoami" 
         sh "pwd" 
         sh "scp -i /home/jenkins/craigradiantblueoregon.pem -o StrictHostKeyChecking=no /var/lib/jenkins/.m2/repository/com/demo/green/1.0-SNAPSHOT/green-1.0-SNAPSHOT.war ec2-user@${PRODUCTION_STACK_IP}:/usr/share/tomcat7/webapps/green.war" 

@@ -15,11 +15,16 @@ node {
             sh "sleep 60"
 
             def x = sh(script: "aws cloudformation describe-stacks --stack-name ${TEST_STACK_NAME} --region us-west-2", returnStdout: true)
+println "k1000"
             def temp = (x =~ /"OutputValue": "(.*)"/)
+println "k1001"
             craigt42_InstanceID = temp[0][1]
+println "k1002"
 	    sh "sleep 1500"
+println "k1003"
         }
 
+println "k1004"
 	if (params.test_stack_ip != 'buildit') {
             craigt42_InstanceID = params.test_stack_ip
         }

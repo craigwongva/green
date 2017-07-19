@@ -4,7 +4,21 @@ node {
     def test_stack_status = 'borrow'
     def PRODUCTION_STACK_IP = '35.161.244.46'
 
-    properties([parameters([string(defaultValue: '34.212.143.54', description: 'Test Stack IP', name: 'TEST_STACK_IP') string(name: 'FOO') ])])
+   properties([
+     parameters([
+       string(
+         defaultValue: '34.212.143.54',
+         description: 'Test Stack IP',
+         name: 'TEST_STACK_IP'
+       ),
+       string(
+         defaultValue: '35.161.244.46',
+         description: 'Production Stack IP',
+         name: 'PRODUCTION_STACK_IP'
+       ),
+     ])
+   ])
+//    properties([parameters([string(defaultValue: '34.212.143.54', description: 'Test Stack IP', name: 'TEST_STACK_IP') string(name: 'FOO') ])])
 //    properties([parameters([string(defaultValue: '35.161.244.46', description: 'Production Stack IP', name: 'PRODUCTION_STACK_IP')])])
 
     stage('checkout') {

@@ -2,7 +2,6 @@ node {
     def mvn = tool 'M3.0.5' 
     def TEST_STACK_NAME = 'craigt44'
     def test_stack_status = 'borrow'
-    //def TEST_STACK_IP = '34.212.143.54' //'35.161.244.46' 
     def PRODUCTION_STACK_IP = '35.161.244.46'
 
     properties([parameters([string(defaultValue: 'Hello', description: 'How should I greet the world?', name: 'TEST_STACK_IP')])])
@@ -18,7 +17,7 @@ node {
         }
     }
 
-    stage('describeTestInstanceAndWait') {
+    stage('describeTestInstance') {
 	if (params.TEST_STACK_IP == '') {
         test_stack_status = 'build'
         def x = sh(script: "aws cloudformation describe-stacks --stack-name ${TEST_STACK_NAME} --region us-west-2", returnStdout: true)
@@ -28,7 +27,7 @@ node {
         }
     }
 
-    stage('invokePhantomOnApp') {
+    stage('waitThenInvokePhantomOnApp') {
         if (test_stack_status == 'build') {
 	sh "sleep 1500"
         }

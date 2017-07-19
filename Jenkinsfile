@@ -1,22 +1,22 @@
 node { 
     def mvn = tool 'M3.0.5' 
     def TEST_STACK_NAME = 'craigt44'
-    def TEST_STACK_IP
+    def TEST_STACK_IP = '35.161.244.46'
     def PRODUCTION_STACK_IP = '35.161.244.46'
-    //def craigt42_InstanceID  //TEST_STACK_IP
     stage('checkout') {
         checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/craigwongva/green']]]) 
     } 
-    stage('cf') {
+    stage('buildTestInstance') {
+	if (TEST_STACK_IP == '') {
         sh "aws cloudformation create-stack --stack-name ${TEST_STACK_NAME} --template-url https://s3.amazonaws.com/venicegeo-devops-dev-gocontainer-project/cf-nexus-java.json --region us-west-2 --parameters ParameterKey=nexususername,ParameterValue=unused ParameterKey=nexuspassword,ParameterValue=unused ParameterKey=tomcatmgrpassword,ParameterValue=unused"
         sh "sleep 60"
 
         def x = sh(script: "aws cloudformation describe-stacks --stack-name ${TEST_STACK_NAME} --region us-west-2", returnStdout: true)
         def temp = (x =~ /"OutputValue": "(.*)"/)
-        //craigt42_InstanceID = temp[0][1]
         TEST_STACK_IP = temp[0][1]
+        }
     }
-    stage('cf-shell1') {
+    stage('invokePhantom') {
 	sh "sleep 1500"
 	sh "cat invoke-phantom.js"
 	//sh "BUILD_ID=dontKillMe ./invoke-phantom $anceID &"
@@ -24,11 +24,10 @@ node {
 	sh "cat invoke-phantom.js"
 	sh "sleep 60"
     }
-    stage('cf-groovy1') {
+    stage('curlAndInterpretStatus') {
 	//sleep(1000*60*2) why is this a day plus? Overridden Groovy sleep???
 	def mickey = [
 	 "curl",  
-	  //"$craigt42_InstanceID:8080/green/timer/status"]
 	  "$TEST_STACK_IP:8080/green/timer/status"]
 	 .execute().text
 	def ARBITRARY_SUCCESS_PCT = 0.95

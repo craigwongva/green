@@ -1,7 +1,7 @@
 node { 
     def mvn = tool 'M3.0.5' 
     def TEST_STACK_NAME = 'craigt44'
-    def TEST_STACK_IP = '' //'35.161.244.46'
+    def TEST_STACK_IP = 35.161.244.46' //''
     def PRODUCTION_STACK_IP = '35.161.244.46'
     stage('checkout') {
         checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/craigwongva/green']]]) 

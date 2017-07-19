@@ -9,7 +9,7 @@ node {
         checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/craigwongva/green']]]) 
     } 
     stage('buildTestInstanceAndApp') {
-	if (params.test_stack_ip == 'buildit') {
+//	if (params.test_stack_ip == 'buildit') {
             echo "You said 'buildit' so I'll build a test instance"
             sh "aws cloudformation create-stack --stack-name ${TEST_STACK_NAME} --template-url https://s3.amazonaws.com/venicegeo-devops-dev-gocontainer-project/cf-nexus-java.json --region us-west-2 --parameters ParameterKey=nexususername,ParameterValue=unused ParameterKey=nexuspassword,ParameterValue=unused ParameterKey=tomcatmgrpassword,ParameterValue=unused"
             sh "sleep 60"
@@ -22,7 +22,7 @@ println "k1001"
 println "k1002"
 	    sh "sleep 1500"
 //println "k1003"
-        }
+//        }
 
 //println "k1004"
 //	if (params.test_stack_ip != 'buildit') {

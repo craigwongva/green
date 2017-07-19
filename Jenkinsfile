@@ -25,6 +25,7 @@ node {
             def x = sh(script: "aws cloudformation describe-stacks --stack-name ${TEST_STACK_NAME} --region us-west-2", returnStdout: true)
             def temp = (x =~ /"OutputValue": "(.*)"/)
             craigt42_InstanceID = temp[0][1]
+	    sh "sleep 1500"
         }
 
 	if (params.REQUESTED_ACTION != 'greeting') {
@@ -32,7 +33,6 @@ node {
         }
     }
     stage('triggerTestServices') {
-	sh "sleep 1500"
 	sh "cat invoke-phantom.js"
 	sh "BUILD_ID=dontKillMe ./invoke-phantom $craigt42_InstanceID &"
 	sh "cat invoke-phantom.js"

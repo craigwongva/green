@@ -4,7 +4,7 @@ node {
     def PRODUCTION_STACK_IP = '35.161.244.46'
     def craigt42_InstanceID = '35.161.244.46'  //TEST_STACK_IP
 
-    properties([parameters([string(defaultValue: 'buildit', description: 'Enter test stack IP or buildit', name: 'test_stack_ip')])])
+//    properties([parameters([string(defaultValue: 'buildit', description: 'Enter test stack IP or buildit', name: 'test_stack_ip')])])
     stage('checkout') {
         checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/craigwongva/green']]]) 
     } 

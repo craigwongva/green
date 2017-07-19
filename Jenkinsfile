@@ -3,6 +3,7 @@ node {
     def TEST_STACK_NAME = 'craigt44'
     def TEST_STACK_IP = '35.161.244.46' //''
     def PRODUCTION_STACK_IP = '35.161.244.46'
+    def test_stack_status = 'borrow'
     stage('checkout') {
         checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/craigwongva/green']]]) 
     } 
@@ -16,6 +17,7 @@ node {
     stage('describeTestInstanceAndWait') {
 println "2001"
 	if (TEST_STACK_IP == '') {
+        test_stack_status = 'build'
 println "2002"
         def x = sh(script: "aws cloudformation describe-stacks --stack-name ${TEST_STACK_NAME} --region us-west-2", returnStdout: true)
 println "2003"
@@ -23,13 +25,15 @@ println "2003"
 println "2004"
         TEST_STACK_IP = temp[0][1]
 println "2005"
-	//sh "sleep 1500"
+	//sh "sleep 1500": this statement seems to cause a Jenkins failure
         }
     }
 
     stage('invokePhantomOnApp') {
 println "2006"
+        if (test_stack_status == 'build') {
 	sh "sleep 1500"
+        }
 println "2007"
 	sh "cat invoke-phantom.js"
 	//sh "BUILD_ID=dontKillMe ./invoke-phantom $anceID &"

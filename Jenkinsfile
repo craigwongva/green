@@ -1,12 +1,12 @@
 node { 
     def mvn = tool 'M3.0.5' 
     def TEST_STACK_NAME = 'craigt44'
-    def TEST_STACK_IP = '35.161.244.46'
+    def TEST_STACK_IP = '' //'35.161.244.46'
     def PRODUCTION_STACK_IP = '35.161.244.46'
     stage('checkout') {
         checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/craigwongva/green']]]) 
     } 
-    stage('buildTestInstance') {
+    stage('buildTestInstanceAndApp') {
 	if (TEST_STACK_IP == '') {
         sh "aws cloudformation create-stack --stack-name ${TEST_STACK_NAME} --template-url https://s3.amazonaws.com/venicegeo-devops-dev-gocontainer-project/cf-nexus-java.json --region us-west-2 --parameters ParameterKey=nexususername,ParameterValue=unused ParameterKey=nexuspassword,ParameterValue=unused ParameterKey=tomcatmgrpassword,ParameterValue=unused"
         sh "sleep 60"
@@ -17,14 +17,14 @@ node {
 	sh "sleep 1500"
         }
     }
-    stage('invokePhantom') {
+    stage('invokePhantomOnApp') {
 	sh "cat invoke-phantom.js"
 	//sh "BUILD_ID=dontKillMe ./invoke-phantom $anceID &"
 	sh "BUILD_ID=dontKillMe ./invoke-phantom $TEST_STACK_IP &"
 	sh "cat invoke-phantom.js"
 	sh "sleep 60"
     }
-    stage('curlAndInterpretStatus') {
+    stage('curlAndInterpretAppStatus') {
 	//sleep(1000*60*2) why is this a day plus? Overridden Groovy sleep???
 	def mickey = [
 	 "curl",  
@@ -43,10 +43,10 @@ node {
 	}
 	//somehow next shell this: pkill -f phantomjs
     }
-    stage('build') { 
+    stage('rebuildApp') { 
         sh "/usr/local/apache-maven/bin/mvn clean -DskipTests install"
     } 
-    stage('deploy') { 
+    stage('deployAppToProd') { 
         sh "whoami" 
         sh "pwd" 
         sh "scp -i /home/jenkins/craigradiantblueoregon.pem -o StrictHostKeyChecking=no /var/lib/jenkins/.m2/repository/com/demo/green/1.0-SNAPSHOT/green-1.0-SNAPSHOT.war ec2-user@${PRODUCTION_STACK_IP}:/usr/share/tomcat7/webapps/green.war" 

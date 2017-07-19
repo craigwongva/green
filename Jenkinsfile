@@ -1,12 +1,14 @@
 node { 
     def mvn = tool 'M3.0.5' 
     def TEST_STACK_NAME = 'craigt44'
-    def TEST_STACK_IP = '35.161.244.46' //''
-    def PRODUCTION_STACK_IP = '35.161.244.46'
     def test_stack_status = 'borrow'
+    def TEST_STACK_IP = '' //'35.161.244.46' 
+    def PRODUCTION_STACK_IP = '35.161.244.46'
+
     stage('checkout') {
         checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/craigwongva/green']]]) 
     } 
+
     stage('buildTestInstanceWithApp') {
 	if (TEST_STACK_IP == '') {
         sh "aws cloudformation create-stack --stack-name ${TEST_STACK_NAME} --template-url https://s3.amazonaws.com/venicegeo-devops-dev-gocontainer-project/cf-nexus-java.json --region us-west-2 --parameters ParameterKey=nexususername,ParameterValue=unused ParameterKey=nexuspassword,ParameterValue=unused ParameterKey=tomcatmgrpassword,ParameterValue=unused"
@@ -15,26 +17,19 @@ node {
     }
 
     stage('describeTestInstanceAndWait') {
-println "2001"
 	if (TEST_STACK_IP == '') {
         test_stack_status = 'build'
-println "2002"
         def x = sh(script: "aws cloudformation describe-stacks --stack-name ${TEST_STACK_NAME} --region us-west-2", returnStdout: true)
-println "2003"
         def temp = (x =~ /"OutputValue": "(.*)"/)
-println "2004"
         TEST_STACK_IP = temp[0][1]
-println "2005"
 	//sh "sleep 1500": this statement seems to cause a Jenkins failure
         }
     }
 
     stage('invokePhantomOnApp') {
-println "2006"
         if (test_stack_status == 'build') {
 	sh "sleep 1500"
         }
-println "2007"
 	sh "cat invoke-phantom.js"
 	//sh "BUILD_ID=dontKillMe ./invoke-phantom $anceID &"
 	sh "BUILD_ID=dontKillMe ./invoke-phantom $TEST_STACK_IP &"

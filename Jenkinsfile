@@ -12,18 +12,18 @@ node {
     } 
 
     stage('buildTestInstanceWithApp') {
-	if (TEST_STACK_IP == '') {
+	if (params.TEST_STACK_IP == '') {
         sh "aws cloudformation create-stack --stack-name ${TEST_STACK_NAME} --template-url https://s3.amazonaws.com/venicegeo-devops-dev-gocontainer-project/cf-nexus-java.json --region us-west-2 --parameters ParameterKey=nexususername,ParameterValue=unused ParameterKey=nexuspassword,ParameterValue=unused ParameterKey=tomcatmgrpassword,ParameterValue=unused"
         sh "sleep 60"
         }
     }
 
     stage('describeTestInstanceAndWait') {
-	if (TEST_STACK_IP == '') {
+	if (params.TEST_STACK_IP == '') {
         test_stack_status = 'build'
         def x = sh(script: "aws cloudformation describe-stacks --stack-name ${TEST_STACK_NAME} --region us-west-2", returnStdout: true)
         def temp = (x =~ /"OutputValue": "(.*)"/)
-        TEST_STACK_IP = temp[0][1]
+        params.TEST_STACK_IP = temp[0][1]
 	//sh "sleep 1500": this statement seems to cause a Jenkins failure
         }
     }
@@ -34,7 +34,7 @@ node {
         }
 	sh "cat invoke-phantom.js"
 	//sh "BUILD_ID=dontKillMe ./invoke-phantom $anceID &"
-	sh "BUILD_ID=dontKillMe ./invoke-phantom $TEST_STACK_IP &"
+	sh "BUILD_ID=dontKillMe ./invoke-phantom ${params.TEST_STACK_IP} &"
 	sh "cat invoke-phantom.js"
 	sh "sleep 60"
     }
@@ -42,7 +42,7 @@ node {
 	//sleep(1000*60*2) why is this a day plus? Overridden Groovy sleep???
 	def mickey = [
 	 "curl",  
-	  "$TEST_STACK_IP:8080/green/timer/status"]
+	  "${TEST_STACK_IP}:8080/green/timer/status"]
 	 .execute().text
 	def ARBITRARY_SUCCESS_PCT = 0.95
 	def NUM_GREEN_DOTS = 100

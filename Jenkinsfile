@@ -67,7 +67,7 @@ node {
 
 	//if (mickey.indexOf(GREEN_DOT_STATUS_DONE.multiply(ARBITRARY_SUCCESS_PCT*NUM_GREEN_DOTS)) < 0) {
 	if (mickey.indexOf('4444444444444444444444444444444444444444444444444444444444') < 0) {
-    	 error "red rover2 $mickey" 
+    	 error "red rover3 ${TEST_STACK_IP}:8080/green/timer/status $mickey" 
 	}
 	//somehow next shell this: pkill -f phantomjs
     }

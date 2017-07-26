@@ -56,7 +56,7 @@ node {
 	//sleep(1000*60*2) why is this a day plus? Overridden Groovy sleep???
 	def mickey = [
 	 "curl",  
-	  "${TEST_STACK_IP}:8080/green/timer/status"]
+	  "${params.TEST_STACK_IP}:8080/green/timer/status"]
 	 .execute().text
 	def ARBITRARY_SUCCESS_PCT = 0.95
 	def NUM_GREEN_DOTS = 100
@@ -67,7 +67,7 @@ node {
 
 	//if (mickey.indexOf(GREEN_DOT_STATUS_DONE.multiply(ARBITRARY_SUCCESS_PCT*NUM_GREEN_DOTS)) < 0) {
 	if (mickey.indexOf('4444444444444444444444444444444444444444444444444444444444') < 0) {
-    	 error "red rover3 ${TEST_STACK_IP}:8080/green/timer/status $mickey" 
+    	 error "red rover3 ${params.TEST_STACK_IP}:8080/green/timer/status $mickey" 
 	}
 	//somehow next shell this: pkill -f phantomjs
     }

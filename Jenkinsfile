@@ -1,18 +1,18 @@
 node { 
     def mvn = tool 'M3.0.5' 
-    def TEST_STACK_NAME = 'craigt44'
-    def test_stack_status = 'borrow'
-    def PRODUCTION_STACK_IP = '35.161.244.46'
+    def TEST_STACK_NAME = 'craigt52'
+    def test_stack_status = 'build'
+    def PRODUCTION_STACK_IP = '52.42.108.124'
 
    properties([
      parameters([
        string(
-         defaultValue: '34.212.143.54',
+         defaultValue: 'default',
          description: 'Test Stack IP',
          name: 'TEST_STACK_IP'
        ),
        string(
-         defaultValue: '35.161.244.46',
+         defaultValue: 'default',
          description: 'Production Stack IP',
          name: 'PRODUCTION_STACK_IP'
        ),

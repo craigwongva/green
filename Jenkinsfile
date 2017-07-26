@@ -1,6 +1,6 @@
 node { 
     def mvn = tool 'M3.0.5' 
-    def TEST_STACK_NAME = 'craigt52'
+    def TEST_STACK_NAME = 'craigj35'
     def test_stack_status = 'build'
     def PRODUCTION_STACK_IP = '52.42.108.124'
 

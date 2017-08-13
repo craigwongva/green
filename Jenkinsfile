@@ -44,6 +44,7 @@ node {
 
     stage('waitThenInvokePhantomOnApp') {
 	sh "cat invoke-phantom.js"
+        sh "whereis phantom"
 	sh "BUILD_ID=dontKillMe ./invoke-phantom ${TEST_STACK_IP} &"
 	sh "cat invoke-phantom.js"
 	sh "sleep 60"

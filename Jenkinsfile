@@ -8,12 +8,12 @@ node {
    properties([
      parameters([
        string(
-         defaultValue: 'default',
+         defaultValue: '34.211.136.17',
          description: 'Test Stack IP',
          name: 'TEST_STACK_IP'
        ),
        string(
-         defaultValue: 'default',
+         defaultValue: '34.213.55.117',
          description: 'Production Stack IP',
          name: 'PRODUCTION_STACK_IP'
        ),

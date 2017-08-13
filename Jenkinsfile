@@ -47,7 +47,9 @@ node {
         sh "whereis phantomjs"
 	sh "BUILD_ID=dontKillMe ./invoke-phantom ${TEST_STACK_IP} &"
 	sh "cat invoke-phantom.js"
-	sh "sleep 60"
+        sh "ps -ef | grep phantom"
+	sh "sleep 120"
+        sh "ps -ef | grep phantom"
     }
 
     stage('curlAndInterpretAppStatus') {
@@ -65,7 +67,7 @@ node {
 
 	//if (mickey.indexOf(GREEN_DOT_STATUS_DONE.multiply(ARBITRARY_SUCCESS_PCT*NUM_GREEN_DOTS)) < 0) leftsquigglybracket
 	if (mickey.indexOf('4444444444444444444444444444444444444444444444444444444444') < 0) {
-    	 error "red rover3 ${TEST_STACK_IP}:8080/green/timer/status $mickey" 
+    	 error "red rover3 http://${TEST_STACK_IP}:8080/green/timer/status $mickey" 
 	}
 	//somehow next shell this: pkill -f phantomjs
     }

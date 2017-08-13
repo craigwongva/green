@@ -34,7 +34,6 @@ node {
     stage('buildApp') { 
         sh "/usr/local/apache-maven/bin/mvn clean -DskipTests install"
     } 
-/*
     stage('deployAppToTest') { 
         sh "whoami" 
         sh "pwd" 
@@ -43,6 +42,7 @@ node {
         sh s
     }
 
+/*
     stage('waitThenInvokePhantomOnApp') {
         println "---waitThenInvokePhantomOnApp---"
 	sh "cat invoke-phantom.js"

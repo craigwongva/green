@@ -34,6 +34,7 @@ node {
     stage('buildApp') { 
         sh "/usr/local/apache-maven/bin/mvn clean -DskipTests install"
     } 
+/*
     stage('deployAppToTest') { 
         sh "whoami" 
         sh "pwd" 
@@ -86,4 +87,5 @@ node {
         sh "pkill -f phantomjs"
         //sh "aws cloudformation delete-stack --stack-name ${TEST_STACK_NAME}  --region us-west-2"
     }
+*/
 }

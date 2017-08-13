@@ -43,16 +43,18 @@ node {
     }
 
     stage('waitThenInvokePhantomOnApp') {
+        println "---waitThenInvokePhantomOnApp---"
 	sh "cat invoke-phantom.js"
         sh "whereis phantomjs"
 	sh "BUILD_ID=dontKillMe ./invoke-phantom ${TEST_STACK_IP} &"
 	sh "cat invoke-phantom.js"
         sh "ps -ef | grep phantom"
-	sh "sleep 120"
+	sh "sleep 20"
         sh "ps -ef | grep phantom"
     }
 
     stage('curlAndInterpretAppStatus') {
+        println "---curlAndInterpretAppStatus---"
 	//sleep(1000*60*2) why is this a day plus? Overridden Groovy sleep???
 	def mickey = [
 	 "curl",  

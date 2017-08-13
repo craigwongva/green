@@ -1,3 +1,4 @@
 #!/bin/bash
 sed -i "s/CHANGEME/$1/" invoke-phantom.js
+echo This is invoke-phantom, about to call phantomjs.
 phantomjs invoke-phantom.js &

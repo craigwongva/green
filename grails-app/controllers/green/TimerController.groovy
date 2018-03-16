@@ -8,7 +8,7 @@ class TimerController {
     def externalUserService
     def workers = 0
 
-    def NUM_COLORFUL_DISPLAY_DOTS = 16
+    def NUM_COLORFUL_DISPLAY_DOTS = 25
 
     def q = new TestVector[NUM_COLORFUL_DISPLAY_DOTS]
     def qhealth = new HealthArray[1]
